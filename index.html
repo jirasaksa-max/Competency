@@ -1,9 +1,988 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RX Competency Dashboard 2024</title>
+  <meta name="description" content="ระบบวิเคราะห์และติดตามผลการประเมินสมรรถนะบุคลากร RX Company 2024">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="chart.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+  /* RX Competency 5.0 Dashboard - Clean White Theme */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --white: #ffffff;
+  --bg: #f8fafc;
+  --bg-2: #f1f5f9;
+  --border: #e2e8f0;
+  --border-soft: #f1f5f9;
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-light: #eff6ff;
+  --blue-mid: #bfdbfe;
+  --cyan: #0891b2;
+  --cyan-light: #ecfeff;
+  --indigo: #4f46e5;
+  --green: #16a34a;
+  --green-light: #f0fdf4;
+  --green-mid: #bbf7d0;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --amber-mid: #fde68a;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --red-mid: #fecaca;
+  --text-900: #0f172a;
+  --text-700: #334155;
+  --text-500: #64748b;
+  --text-400: #94a3b8;
+  --sidebar-bg: #0f172a;
+  --sidebar-w: 252px;
+  --shadow-xs: 0 1px 2px rgba(15,23,42,.04);
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.07);
+  --shadow-md: 0 4px 6px -1px rgba(15,23,42,.06);
+  --shadow-card: 0 0 0 1px rgba(15,23,42,.05), 0 4px 16px rgba(15,23,42,.06);
+  --shadow-hover: 0 0 0 1px rgba(37,99,235,.15), 0 8px 24px rgba(37,99,235,.1);
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px; --r-full: 9999px;
+  --ease: cubic-bezier(.4,0,.2,1); --dur: .2s;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text-900); min-height: 100vh; overflow-x: hidden; }
+
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar { width: var(--sidebar-w); background: var(--sidebar-bg); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 200; }
+.sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 20px 16px 16px; border-bottom: 1px solid rgba(255,255,255,.06); }
+.brand-icon { width: 38px; height: 38px; border-radius: var(--r-md); background: linear-gradient(135deg, var(--blue), var(--cyan)); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .9rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37,99,235,.4); }
+.brand-text { overflow: hidden; }
+.brand-name { font-size: .9rem; font-weight: 700; color: #fff; line-height: 1.2; white-space: nowrap; }
+.brand-sub { font-size: .65rem; font-weight: 300; color: #64748b; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+
+.sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+.nav-section-label { font-size: .6rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #475569; padding: 12px 8px 6px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--r-md); color: #94a3b8; font-size: .82rem; font-weight: 500; cursor: pointer; transition: all var(--dur) var(--ease); border: none; background: none; width: 100%; text-align: left; margin-bottom: 2px; white-space: nowrap; }
+.nav-item:hover { background: rgba(255,255,255,.06); color: #e2e8f0; }
+.nav-item.active { background: rgba(37,99,235,.18); color: #93c5fd; font-weight: 600; }
+.nav-item.active .nav-dot { background: #3b82f6; }
+.nav-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; }
+.nav-icon svg { width: 18px; height: 18px; fill: currentColor; }
+.nav-dot { width: 5px; height: 5px; border-radius: 50%; background: #334155; margin-left: auto; flex-shrink: 0; }
+
+.sidebar-footer { padding: 12px 10px; border-top: 1px solid rgba(255,255,255,.06); }
+.sidebar-year-badge { display: flex; align-items: center; gap: 8px; background: rgba(37,99,235,.12); border: 1px solid rgba(37,99,235,.25); border-radius: var(--r-md); padding: 8px 12px; font-size: .75rem; font-weight: 600; color: #93c5fd; }
+.api-btn { font-family: 'Kanit', sans-serif; display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--r-md); background: rgba(56,189,248,.12); border: 1px solid rgba(56,189,248,.3); color: #38bdf8; font-size: .75rem; font-weight: 600; cursor: pointer; transition: all var(--dur) var(--ease); width: 100%; justify-content: center; margin-top: 10px; }
+.api-btn:hover { background: rgba(56,189,248,.2); }
+
+.main-wrap { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-xs); }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.topbar-title { font-size: 1.05rem; font-weight: 700; color: var(--text-900); }
+.topbar-sub { font-size: .75rem; color: var(--text-500); font-weight: 400; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.filter-label { font-size: .7rem; font-weight: 600; color: var(--text-400); text-transform: uppercase; letter-spacing: .06em; }
+.filter-select { font-family: 'Kanit', sans-serif; font-size: .78rem; font-weight: 500; color: var(--text-700); background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 5px 10px; cursor: pointer; outline: none; transition: all var(--dur) var(--ease); }
+.filter-select:hover, .filter-select:focus { border-color: var(--blue); background: var(--white); }
+
+.page-content { padding: 24px 28px; flex: 1; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp .3s var(--ease) both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+@media (max-width: 1300px) { .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 700px)  { .kpi-grid { grid-template-columns: 1fr; } }
+
+.kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px; box-shadow: var(--shadow-card); transition: all var(--dur) var(--ease); position: relative; overflow: hidden; }
+.kpi-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--r-lg) var(--r-lg) 0 0; }
+.kpi-card.blue::after   { background: linear-gradient(90deg,var(--blue),var(--cyan)); }
+.kpi-card.green::after  { background: linear-gradient(90deg,var(--green),#22c55e); }
+.kpi-card.amber::after  { background: linear-gradient(90deg,var(--amber),#f59e0b); }
+.kpi-card.red::after    { background: linear-gradient(90deg,var(--red),#f43f5e); }
+.kpi-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+
+.kpi-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+.kpi-label { font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--text-500); }
+.kpi-ico { width: 36px; height: 36px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.ico-blue   { background: var(--blue-light); color: var(--blue); }
+.ico-green  { background: var(--green-light); color: var(--green); }
+.ico-amber  { background: var(--amber-light); color: var(--amber); }
+.ico-red    { background: var(--red-light); color: var(--red); }
+.kpi-val { font-size: 2rem; font-weight: 800; color: var(--text-900); line-height: 1; margin-bottom: 6px; }
+
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: var(--r-full); font-size: .7rem; font-weight: 600; }
+.pill-green { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+.pill-red   { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+.pill-amber { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber-mid); }
+.pill-blue  { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
+.kpi-foot { font-size: .72rem; color: var(--text-400); margin-top: 6px; font-weight: 400; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 20px; }
+@media (max-width: 1200px) { .grid-2 { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .grid-3 { grid-template-columns: 1fr; } }
+
+.card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-card); overflow: hidden; }
+.mb-4 { margin-bottom: 20px; }
+
+.card-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-title { font-size: 1rem; font-weight: 700; color: var(--text-900); display: flex; align-items: center; gap: 8px; }
+.card-sub { font-size: .75rem; color: var(--text-500); font-weight: 400; margin-top: 3px; }
+.card-body { padding: 20px; }
+.chart-box { position: relative; width: 100%; height: 300px; }
+
+.tbl-wrap { width: 100%; overflow-x: auto; }
+.tbl { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.tbl thead th { background: var(--bg); color: var(--text-500); font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; padding: 10px 16px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
+.tbl tbody td { padding: 11px 16px; border-bottom: 1px solid var(--border-soft); color: var(--text-700); vertical-align: middle; }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr:hover td { background: var(--bg); }
+
+.bar-wrap { display: flex; align-items: center; gap: 10px; }
+.bar-bg { flex: 1; height: 7px; border-radius: var(--r-full); background: var(--bg-2); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: var(--r-full); transition: width 1s var(--ease); }
+.bar-fill.blue    { background: linear-gradient(90deg,var(--blue),var(--cyan)); }
+.bar-fill.amber   { background: linear-gradient(90deg,var(--amber),#f59e0b); }
+.bar-fill.red     { background: linear-gradient(90deg,var(--red),#f43f5e); }
+.bar-fill.green   { background: linear-gradient(90deg,var(--green),#22c55e); }
+.bar-pct { font-size: .78rem; font-weight: 700; min-width: 42px; text-align: right; color: var(--text-700); }
+
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: var(--r-full); font-size: .72rem; font-weight: 600; white-space: nowrap; }
+.tag-red    { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+.tag-amber  { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber-mid); }
+.tag-green  { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+.tag-blue   { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
+.tag-slate  { background: var(--bg-2); color: var(--text-500); border: 1px solid var(--border); }
+
+.chip { display: inline-block; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: var(--r-sm); padding: 2px 7px; font-size: .7rem; font-weight: 500; margin: 2px 2px; }
+.chip-core  { background: #faf5ff; color: #7c3aed; border-color: #e9d5ff; }
+.chip-know  { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+.chip-skill { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
+.insight-row { display: flex; flex-direction: column; gap: 12px; }
+.insight-box { border-radius: var(--r-md); padding: 14px 16px; border-left: 4px solid; }
+.insight-box.blue  { background: var(--blue-light); border-color: var(--blue); }
+.insight-box.amber { background: var(--amber-light); border-color: var(--amber); }
+.insight-box.red   { background: var(--red-light); border-color: var(--red); }
+.insight-box.green { background: var(--green-light); border-color: var(--green); }
+.insight-head { font-size: .82rem; font-weight: 700; margin-bottom: 5px; }
+.insight-box.blue  .insight-head { color: var(--blue-dark); }
+.insight-box.amber .insight-head { color: #92400e; }
+.insight-box.red   .insight-head { color: #991b1b; }
+.insight-box.green .insight-head { color: #14532d; }
+.insight-body { font-size: .78rem; color: var(--text-700); line-height: 1.6; }
+
+.jd-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.search-box { font-family: 'Kanit', sans-serif; font-size: .82rem; font-weight: 400; color: var(--text-900); background: var(--white); border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px 14px; width: 300px; outline: none; transition: all var(--dur) var(--ease); box-shadow: var(--shadow-xs); }
+.search-box::placeholder { color: var(--text-400); }
+.search-box:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+.result-count { font-size: .78rem; font-weight: 600; color: var(--text-500); margin-left: auto; }
+
+.btn { font-family: 'Kanit', sans-serif; font-size: .8rem; font-weight: 600; border: none; cursor: pointer; border-radius: var(--r-md); display: inline-flex; align-items: center; gap: 6px; transition: all var(--dur) var(--ease); padding: 8px 16px; }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,.3); }
+.btn-primary:hover { background: var(--blue-dark); box-shadow: 0 4px 12px rgba(37,99,235,.4); transform: translateY(-1px); }
+.btn-sm { padding: 5px 10px; font-size: .72rem; border-radius: var(--r-sm); background: var(--bg-2); color: var(--text-700); border: 1px solid var(--border); }
+.btn-sm:hover { background: var(--border); }
+
+.hm-cell { display: inline-block; padding: 4px 8px; border-radius: var(--r-sm); font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.hm-high   { background: #fee2e2; color: #b91c1c; }
+.hm-medium { background: #fef3c7; color: #92400e; }
+.hm-low    { background: #dcfce7; color: #15803d; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); backdrop-filter: blur(4px); z-index: 9000; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: var(--r-xl); width: 90%; max-width: 860px; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 24px 48px rgba(15,23,42,.2); animation: modalIn .25s var(--ease); }
+@keyframes modalIn { from { transform: scale(.96) translateY(8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.modal-head { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 1rem; font-weight: 700; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+.modal-close { width: 30px; height: 30px; border-radius: var(--r-sm); border: none; background: var(--bg-2); color: var(--text-500); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all var(--dur) var(--ease); }
+.modal-close:hover { background: var(--border); color: var(--text-900); }
+.modal-body { padding: 22px; overflow-y: auto; font-size: .84rem; color: var(--text-700); }
+.code-block { background: var(--sidebar-bg); color: #7dd3fc; border-radius: var(--r-md); padding: 16px; font-family: 'Fira Code', 'Courier New', monospace; font-size: .78rem; line-height: 1.65; overflow-x: auto; margin: 10px 0 18px; border: 1px solid #1e293b; }
+.endpoint-title { font-size: .88rem; font-weight: 700; color: var(--blue); margin-top: 18px; margin-bottom: 4px; }
+
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.section-title { font-size: 1rem; font-weight: 700; color: var(--text-900); }
+.section-sub { font-size: .75rem; color: var(--text-500); margin-top: 2px; }
+.stat-row { display: flex; gap: 16px; flex-wrap: wrap; padding: 14px 20px; background: var(--bg); border-top: 1px solid var(--border); }
+.stat-item { text-align: center; }
+.stat-num { font-size: 1.3rem; font-weight: 800; color: var(--text-900); }
+.stat-lbl { font-size: .68rem; color: var(--text-400); text-transform: uppercase; letter-spacing: .05em; }
+
+.page-eyebrow { font-size: .7rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--blue); margin-bottom: 4px; }
+.page-h { font-size: 1.35rem; font-weight: 800; color: var(--text-900); margin-bottom: 2px; }
+.page-desc { font-size: .8rem; color: var(--text-500); font-weight: 400; }
+
+@media (max-width: 1024px) {
+  .sidebar { width: 52px; }
+  .sidebar .brand-text, .sidebar .nav-item span:not(.nav-icon):not(.nav-dot), .sidebar .nav-section-label, .sidebar .sidebar-year-badge span, .sidebar .brand-sub { display: none; }
+  .sidebar .brand-icon { margin: 0 auto; }
+  .sidebar-brand { justify-content: center; padding: 16px 8px; }
+  .sidebar-footer { padding: 8px; }
+  .main-wrap { margin-left: 52px; }
+  .nav-item { justify-content: center; padding: 10px 0; }
+  .nav-dot { display: none; }
+}
+@media (max-width: 768px) {
+  .page-content { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .filter-row { display: none; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">RX</div>
+      <div class="brand-text">
+        <div class="brand-name">Competency 5.0</div>
+        <div class="brand-sub">RX Company · 2024</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">ANALYTICS</div>
+
+      <button class="nav-item active" data-tab="overview" id="navOverview">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg></span>
+        <span>ภาพรวมและเป้าหมาย</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <button class="nav-item" data-tab="jd" id="navJD">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 16H5V5h2v2h10V5h2v14zM7 9h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>
+        <span>เกณฑ์ประเมิน 124 ตำแหน่ง</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <div class="nav-section-label">COMPETENCY</div>
+
+      <button class="nav-item" data-tab="core" id="navCore">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg></span>
+        <span>Core Competency</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <button class="nav-item" data-tab="job" id="navJob">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.6C.4 7 1 10 3 12c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.4-.4.4-1.1 0-1.5z"/></svg></span>
+        <span>Job Competency</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <button class="nav-item" data-tab="matrix" id="navMatrix">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"/></svg></span>
+        <span>Matrix Heatmap</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <div class="nav-section-label">MANAGEMENT</div>
+
+      <button class="nav-item" data-tab="idp" id="navIDP">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>
+        <span>IDP Action Plan</span>
+        <span class="nav-dot"></span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-year-badge">
+        <span style="display:flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg></span>
+        <span>ประจำปี พ.ศ. 2567</span>
+      </div>
+      <button class="api-btn" id="btnOpenApi">
+        ⚡ Backend & API Specs
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAP -->
+  <div class="main-wrap">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="topbar-title" id="topbarTitle">ภาพรวมและเป้าหมาย</div>
+          <div class="topbar-sub">การประเมิน Competency ประจำปี 2567 · พนักงาน 281 ท่าน</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="filter-row">
+          <span class="filter-label">กลุ่มงาน</span>
+          <select id="filterGroup" class="filter-select">
+            <option value="all">ทั้งหมด (281)</option>
+            <option value="office">สำนักงาน (124)</option>
+            <option value="sales">ขาย (102)</option>
+            <option value="lasik">เลสิก (56)</option>
+          </select>
+          <span class="filter-label">ระดับ</span>
+          <select id="filterLevel" class="filter-select">
+            <option value="all">ทุกระดับ</option>
+            <option value="1">พนักงาน (233)</option>
+            <option value="2">หัวหน้างาน (34)</option>
+            <option value="3">ผู้จัดการ (13)</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content">
+
+      <!-- TAB 1: OVERVIEW -->
+      <section id="tab-overview" class="tab-panel active">
+
+        <div class="section-header mb-4">
+          <div>
+            <div class="page-eyebrow">Corporate Dashboard</div>
+            <div class="page-h">ภาพรวมผลการประเมิน Competency 2024</div>
+            <div class="page-desc">สรุปผลการประเมิน 281 ท่าน ครอบคลุมทุกกลุ่มงานและระดับตำแหน่ง · ปีงบประมาณ 2567</div>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card blue">
+            <div class="kpi-head">
+              <div class="kpi-label">พนักงานที่ได้รับการประเมิน</div>
+              <div class="kpi-ico ico-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            </div>
+            <div class="kpi-val">281</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+              <span class="pill pill-blue">สำนักงาน 124</span>
+              <span class="pill pill-blue">ขาย 102</span>
+              <span class="pill pill-blue">เลสิก 56</span>
+            </div>
+            <div class="kpi-foot">ครบ 100% ของพนักงานทั้งหมดในระบบ</div>
+          </div>
+
+          <div class="kpi-card green">
+            <div class="kpi-head">
+              <div class="kpi-label">Corporate Objective (Entrepreneurship)</div>
+              <div class="kpi-ico ico-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg></div>
+            </div>
+            <div class="kpi-val">20.64%</div>
+            <div style="margin-bottom:6px;">
+              <span class="pill pill-green">✓ ผ่านเป้าหมาย ≤ 30%</span>
+            </div>
+            <div class="kpi-foot">ปรับตัวดีขึ้นจากปี 2566 ที่ 22.67% (ลดลง 2.03%)</div>
+          </div>
+
+          <div class="kpi-card amber">
+            <div class="kpi-head">
+              <div class="kpi-label">Core Gap สูงสุด (ทั้งบริษัท)</div>
+              <div class="kpi-ico ico-amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></div>
+            </div>
+            <div class="kpi-val">31.32%</div>
+            <div style="margin-bottom:6px;">
+              <span class="pill pill-amber">⚠ Learning Gap</span>
+            </div>
+            <div class="kpi-foot">88 คน จาก 281 ท่าน ต่ำกว่าระดับที่คาดหวัง</div>
+          </div>
+
+          <div class="kpi-card red">
+            <div class="kpi-head">
+              <div class="kpi-label">Job Gap สูงสุด (ทั้งบริษัท)</div>
+              <div class="kpi-ico ico-red"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg></div>
+            </div>
+            <div class="kpi-val">45.45%</div>
+            <div style="margin-bottom:6px;">
+              <span class="pill pill-red">🔴 ความรู้ระบบคุณภาพ</span>
+            </div>
+            <div class="kpi-foot">55 คน จาก 121 ท่าน ในสายงานที่เกี่ยวข้อง</div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">🎯 Core Competency Radar (5 ด้าน)</div>
+                <div class="card-sub">เปรียบเทียบ % Gap กับเป้าหมาย 30% ทั้งองค์กร</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-box"><canvas id="chartRadar"></canvas></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">🛠 Top 5 Job Competency Gaps</div>
+                <div class="card-sub">หัวข้อสมรรถนะงานที่มี % Gap สูงสุดในบริษัท</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-box"><canvas id="chartJobBar"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Table -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📋 สรุปผล Core Competency รายหัวข้อ</div>
+              <div class="card-sub">ข้อมูลรวมพนักงานทั้งหมด 281 ท่าน · ปี 2567</div>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>RX Core Competency</th>
+                  <th>พนักงานทั้งหมด</th>
+                  <th>จำนวนที่มี Gap</th>
+                  <th>% Gap</th>
+                  <th>สัดส่วน</th>
+                </tr>
+              </thead>
+              <tbody id="tblCoreSummary"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 2: JD MATRIX -->
+      <section id="tab-jd" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">JD Competency & OJT Matrix</div>
+            <div class="page-h">เกณฑ์ประเมินสมรรถนะ 124 รายตำแหน่ง</div>
+            <div class="page-desc">ถอดข้อมูลจากไฟล์ JD List _ Competency _ OJT.xlsx · แสดงหัวข้อที่แต่ละตำแหน่งต้องถูกประเมิน</div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🔍 ค้นหาและกรองตำแหน่งงาน</div>
+              <div class="card-sub">ค้นหาด้วยชื่อตำแหน่ง รหัส JD หรือหน่วยงาน</div>
+            </div>
+            <span class="result-count" id="jdCount">124 ตำแหน่ง</span>
+          </div>
+          <div class="card-body" style="padding-bottom:0;">
+            <div class="jd-controls">
+              <input type="text" class="search-box" id="searchJD" placeholder="🔍  พิมพ์ชื่อตำแหน่ง, รหัส JD, หรือหน่วยงาน...">
+              <select id="jdDept" class="filter-select">
+                <option value="all">ทุกหน่วยงาน</option>
+                <option value="ACC">ACC · บัญชีและการเงิน</option>
+                <option value="CHD">CHD · แคชเชียร์</option>
+                <option value="CMP">CMP · บริหารค่าตอบแทน</option>
+                <option value="CRD">CRD · บริหารลูกหนี้</option>
+                <option value="ENG">ENG · วิศวกรรมช่าง</option>
+                <option value="HRD">HRD · ทรัพยากรบุคคล</option>
+                <option value="ITD">ITD · สารสนเทศ</option>
+                <option value="MNG">MNG · บริหารจัดการ</option>
+                <option value="PSA">PSA · ธุรการขาย</option>
+                <option value="REG">REG · ขึ้นทะเบียนผลิตภัณฑ์</option>
+                <option value="REX">REX · รถพยาบาลและบริการ</option>
+              </select>
+              <select id="jdLevel" class="filter-select">
+                <option value="all">ทุกระดับ</option>
+                <option value="1">Level 1 · พนักงาน</option>
+                <option value="2">Level 2 · หัวหน้างาน</option>
+                <option value="3">Level 3 · ผู้จัดการ</option>
+              </select>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>รหัส JD</th>
+                  <th>แผนก</th>
+                  <th>ชื่อตำแหน่งงาน</th>
+                  <th>ระดับ</th>
+                  <th>จำนวนหัวข้อ</th>
+                  <th>Competency ที่ต้องประเมิน</th>
+                </tr>
+              </thead>
+              <tbody id="tblJD"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 3: CORE COMPETENCY -->
+      <section id="tab-core" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Core Competency Analysis</div>
+            <div class="page-h">วิเคราะห์ Core Competency แยกรายระดับตำแหน่ง</div>
+            <div class="page-desc">5 สมรรถนะหลัก · เปรียบเทียบ พนักงาน vs หัวหน้างาน vs ผู้จัดการ</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">📊 Core Gap แยกตามระดับตำแหน่ง</div>
+                <div class="card-sub">แสดง % Gap ของ 5 Core Competency ในแต่ละ Level</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-box"><canvas id="chartCoreLevel"></canvas></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">💡 Key Insights รายระดับตำแหน่ง</div>
+                <div class="card-sub">สิ่งที่ค้นพบและข้อเสนอแนะเชิงพัฒนา</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="insight-row">
+                <div class="insight-box blue">
+                  <div class="insight-head">👤 ระดับพนักงาน — 233 ท่าน (Level 1)</div>
+                  <div class="insight-body">
+                    Gap สูงสุด: <strong>Learning 29.18%</strong> (68 คน)<br>
+                    Gap ต่ำสุด: Relationship Excellence เพียง <strong>1.29%</strong><br>
+                    ข้อเสนอแนะ: จัดโปรแกรม Self-Learning / E-Learning สำหรับพนักงานระดับต้น
+                  </div>
+                </div>
+                <div class="insight-box amber">
+                  <div class="insight-head">👔 ระดับหัวหน้างาน — 34 ท่าน (Level 2)</div>
+                  <div class="insight-body">
+                    Gap สูงสุด: <strong>Innovative Thinking 58.82%</strong> (20 คน)<br>
+                    Entrepreneurship มี Gap <strong>50.00%</strong><br>
+                    ข้อเสนอแนะ: Workshop Creative Thinking + Leadership Development
+                  </div>
+                </div>
+                <div class="insight-box red">
+                  <div class="insight-head">🏢 ระดับผู้จัดการ — 14 ท่าน (Level 3)</div>
+                  <div class="insight-body">
+                    Gap สูงสุด: <strong>Fact 71.43%</strong> (10 คน)<br>
+                    Innovative Thinking <strong>57.14%</strong> · Relationship <strong>50%</strong><br>
+                    ข้อเสนอแนะ: Executive Coaching + Data-Driven Decision Making
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core detail table -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="card-title">📋 ตารางผล Core Competency รายระดับตำแหน่ง</div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Core Competency</th>
+                  <th>รวม (281)</th>
+                  <th>พนักงาน (233)</th>
+                  <th>หัวหน้างาน (34)</th>
+                  <th>ผู้จัดการ (14)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Relationship Excellence</strong></td>
+                  <td><span class="hm-cell hm-low">6.41%</span></td>
+                  <td><span class="hm-cell hm-low">1.29%</span></td>
+                  <td><span class="hm-cell hm-medium">23.53%</span></td>
+                  <td><span class="hm-cell hm-high">50.00%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Fact</strong></td>
+                  <td><span class="hm-cell hm-low">12.81%</span></td>
+                  <td><span class="hm-cell hm-low">4.72%</span></td>
+                  <td><span class="hm-cell hm-medium">44.12%</span></td>
+                  <td><span class="hm-cell hm-high">71.43%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Innovative Thinking</strong></td>
+                  <td><span class="hm-cell hm-medium">25.62%</span></td>
+                  <td><span class="hm-cell hm-medium">28.46%</span></td>
+                  <td><span class="hm-cell hm-high">58.82%</span></td>
+                  <td><span class="hm-cell hm-high">57.14%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Learning</strong></td>
+                  <td><span class="hm-cell hm-high">31.32%</span></td>
+                  <td><span class="hm-cell hm-medium">29.18%</span></td>
+                  <td><span class="hm-cell hm-medium">38.24%</span></td>
+                  <td><span class="hm-cell hm-high">50.00%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Entrepreneurship</strong></td>
+                  <td><span class="hm-cell hm-medium">20.64%</span></td>
+                  <td><span class="hm-cell hm-low">15.02%</span></td>
+                  <td><span class="hm-cell hm-high">50.00%</span></td>
+                  <td><span class="hm-cell hm-medium">42.86%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 4: JOB COMPETENCY -->
+      <section id="tab-job" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Job Competency Analysis</div>
+            <div class="page-h">วิเคราะห์ Job Competency (Knowledge + Skills)</div>
+            <div class="page-desc">Knowledge 6 หัวข้อ · Skills 31 หัวข้อ · แยกตามกลุ่มงาน</div>
+          </div>
+        </div>
+
+        <!-- Dept gap cards -->
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏢 กลุ่มงานสำนักงาน</div>
+            </div>
+            <div class="card-body">
+              <div class="insight-row">
+                <div>
+                  <div style="font-size:.78rem;color:var(--text-500);margin-bottom:8px;font-weight:600;">TOP GAPS</div>
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>ความรู้ระบบคุณภาพ</span><strong>46.6%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill red" style="width:46.6%"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>การสื่อสาร</span><strong>20.5%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill amber" style="width:20.5%"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>การแก้ไขปัญหาและการตัดสินใจ</span><strong>15.15%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill blue" style="width:15.15%"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>การปฏิบัติงานตามขั้นตอน &amp; เอกสาร</span><strong>8.92%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill green" style="width:8.92%"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 กลุ่มงานขาย</div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การวิเคราะห์ข้อมูล</span><strong>26.26%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill red" style="width:26.26%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การแก้ไขปัญหาและการตัดสินใจ</span><strong>23.75%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill amber" style="width:23.75%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การนำเสนอ (Presentation)</span><strong>16.67%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill blue" style="width:16.67%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>ทักษะการขาย (Selling Skill)</span><strong>7.35%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill green" style="width:7.35%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👁️ กลุ่มงานเลสิก</div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การปฏิบัติงานตามขั้นตอน &amp; เอกสาร</span><strong>14.29%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill red" style="width:14.29%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การแก้ไขปัญหาและการตัดสินใจ</span><strong>10.20%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill amber" style="width:10.20%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>ความรู้ทางเลสิค</span><strong>3.70%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill blue" style="width:3.70%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job Level gaps -->
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👤 พนักงาน Level 1 — Top Gaps</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Competency</th><th>จาก</th><th>Gap %</th></tr></thead>
+                <tbody>
+                  <tr><td>ความรู้ระบบคุณภาพ</td><td>103</td><td><span class="tag tag-red">46.60%</span></td></tr>
+                  <tr><td>การสื่อสาร</td><td>161</td><td><span class="tag tag-amber">20.50%</span></td></tr>
+                  <tr><td>การแก้ไขปัญหาและการตัดสินใจ</td><td>231</td><td><span class="tag tag-blue">15.15%</span></td></tr>
+                  <tr><td>การปฏิบัติงานตามขั้นตอน &amp; เอกสาร</td><td>157</td><td><span class="tag tag-green">8.92%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👔 หัวหน้างาน Level 2 — Top Gaps</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Competency</th><th>จาก</th><th>Gap %</th></tr></thead>
+                <tbody>
+                  <tr><td>การวิเคราะห์ข้อมูล</td><td>34</td><td><span class="tag tag-red">64.71%</span></td></tr>
+                  <tr><td>การบริหารจัดการ</td><td>24</td><td><span class="tag tag-red">50.00%</span></td></tr>
+                  <tr><td>การปฏิบัติงานเชิงกลยุทธ์</td><td>30</td><td><span class="tag tag-amber">46.67%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏢 ผู้จัดการ Level 3 — Top Gaps</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Competency</th><th>จาก</th><th>Gap %</th></tr></thead>
+                <tbody>
+                  <tr><td>ภาวะผู้นำ (Leadership)</td><td>11</td><td><span class="tag tag-red">81.82%</span></td></tr>
+                  <tr><td>การสอนงานและพัฒนาพนักงาน</td><td>10</td><td><span class="tag tag-red">70.00%</span></td></tr>
+                  <tr><td>การวิเคราะห์ข้อมูล</td><td>10</td><td><span class="tag tag-red">70.00%</span></td></tr>
+                  <tr><td>การปฏิบัติงานเชิงกลยุทธ์</td><td>12</td><td><span class="tag tag-amber">66.67%</span></td></tr>
+                  <tr><td>การบริหารบุคลากร</td><td>11</td><td><span class="tag tag-amber">63.64%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 5: MATRIX HEATMAP -->
+      <section id="tab-matrix" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Competency Matrix</div>
+            <div class="page-h">Heatmap Matrix เปรียบเทียบทุกมิติ</div>
+            <div class="page-desc">สัดส่วน % Gap แยกตามกลุ่มงาน (3 กลุ่ม) และระดับตำแหน่ง (3 ระดับ)</div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="card-title">🧩 Core Competency Gap Heatmap (ทุกมิติ)</div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th rowspan="2" style="vertical-align:middle;">Core Competency</th>
+                  <th rowspan="2" style="vertical-align:middle;text-align:center;">บริษัท (281)</th>
+                  <th colspan="3" style="text-align:center;border-left:2px solid var(--border);">กลุ่มงาน</th>
+                  <th colspan="3" style="text-align:center;border-left:2px solid var(--border);">ระดับตำแหน่ง</th>
+                </tr>
+                <tr>
+                  <th style="border-left:2px solid var(--border);">สำนักงาน (124)</th>
+                  <th>ขาย (102)</th>
+                  <th>เลสิก (56)</th>
+                  <th style="border-left:2px solid var(--border);">พนักงาน (233)</th>
+                  <th>หัวหน้างาน (34)</th>
+                  <th>ผู้จัดการ (14)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Relationship Excellence</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">6.41%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">2.44%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">7.84%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">12.50%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">1.29%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">23.53%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">50.00%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Fact</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">12.81%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">10.57%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">14.71%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">14.29%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">4.72%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">44.12%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">71.43%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Innovative Thinking</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">25.62%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-medium">28.46%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">25.49%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">19.64%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">18.88%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">58.82%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">57.14%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Learning</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">31.32%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-high">39.84%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">22.55%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">28.57%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-medium">29.18%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">38.24%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">50.00%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Entrepreneurship</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">20.64%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-medium">21.95%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">18.63%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">21.43%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">15.02%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">50.00%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">42.86%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="stat-row">
+            <div class="stat-item" style="display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--text-500);">
+              <span class="hm-cell hm-high" style="font-size:.7rem;">≥ 30%</span> Gap สูง — ต้องแก้ไขเร่งด่วน
+              &nbsp;&nbsp;
+              <span class="hm-cell hm-medium" style="font-size:.7rem;">15–30%</span> Gap ปานกลาง — ควรติดตาม
+              &nbsp;&nbsp;
+              <span class="hm-cell hm-low" style="font-size:.7rem;">&lt; 15%</span> Gap ต่ำ — อยู่ในเกณฑ์ดี
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 6: IDP -->
+      <section id="tab-idp" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Individual Development Plan</div>
+            <div class="page-h">แผนพัฒนาพนักงานรายบุคคล (IDP)</div>
+            <div class="page-desc">สำหรับพนักงานที่มีผลประเมินต่ำกว่าระดับที่คาดหวัง (Competency Gap &gt; 0)</div>
+          </div>
+          <button class="btn btn-primary" onclick="alert('เปิดฟอร์มสร้างแผน IDP ใหม่')">+ สร้างแผน IDP ใหม่</button>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="card-title">📝 รายการแผนพัฒนาพนักงาน</div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>รหัส IDP</th>
+                  <th>ชื่อ-สกุล</th>
+                  <th>ระดับตำแหน่ง</th>
+                  <th>กลุ่มงาน</th>
+                  <th>Competency Gap</th>
+                  <th>สถานะ</th>
+                  <th>กำหนดเสร็จ</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="tblIDP"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: API SPECS -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">⚡ Backend Integration & REST API Specification</div>
+      <button class="modal-close" id="btnCloseApi">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:12px;">คู่มือ RESTful API Endpoints สำหรับวิศวกร Backend นำไปเขียนต่อเชื่อมต่อฐานข้อมูล SQL/NoSQL ได้ทันที</p>
+
+      <div class="endpoint-title">① GET /api/v1/competency/summary</div>
+      <div class="code-block">// Response 200 OK
+{
+  "year": 2024,
+  "totalEvaluated": 281,
+  "breakdown": { "office": 124, "sales": 102, "lasik": 56 },
+  "levels": { "staff": 233, "supervisor": 34, "manager": 14 },
+  "corporateObjective": {
+    "kpi": "Entrepreneurship Gap",
     "target": 30.0,
     "actual": 20.64,
     "passed": true,
     "prev": 22.67
   }
 }</div>
+
       <div class="endpoint-title">② GET /api/v1/competency/core-gaps?level={level}&dept={dept}</div>
       <div class="code-block">// SQL Query Example
 SELECT
@@ -17,6 +996,7 @@ JOIN competencies c ON e.competency_id = c.id
 WHERE c.type = 'core'
 GROUP BY c.id, c.name
 ORDER BY gap_pct DESC;</div>
+
       <div class="endpoint-title">③ GET /api/v1/jd-positions?dept={dept}&level={level}</div>
       <div class="code-block">// Response: 124 positions
 {
@@ -35,6 +1015,7 @@ ORDER BY gap_pct DESC;</div>
     }
   ]
 }</div>
+
       <div class="endpoint-title">④ POST /api/v1/idp/plans</div>
       <div class="code-block">// Request Body
 {
@@ -48,6 +1029,7 @@ ORDER BY gap_pct DESC;</div>
     </div>
   </div>
 </div>
+
 <script src="app.js"></script>
 </body>
 </html>
