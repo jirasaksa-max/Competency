@@ -3,525 +3,791 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RX Competency Assessment 5.0 Dashboard (Light Theme)</title>
-
-  <!-- Google Fonts: Plus Jakarta Sans & Prompt -->
+  <title>RX Competency Dashboard 2024</title>
+  <meta name="description" content="ระบบวิเคราะห์และติดตามผลการประเมินสมรรถนะบุคลากร RX Company 2024">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Chart.js CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="app-container">
-    
-    <!-- Sidebar Navigation (Executive Dark Slate Contrast) -->
-    <aside class="sidebar">
-      <div>
-        <div class="brand-logo">
-          <div class="logo-icon">RX</div>
-          <div>
-            <div class="brand-title">Competency 5.0</div>
-            <div class="brand-subtitle">Assessment Analytics</div>
-          </div>
-        </div>
+<div class="app-shell">
 
-        <ul class="nav-menu">
-          <li class="nav-item active">
-            <button data-tab="overview">
-              <span class="nav-icon">📊</span>
-              <span>ภาพรวม & เป้าหมาย</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button data-tab="jd">
-              <span class="nav-icon">📋</span>
-              <span>เกณฑ์ประเมิน 124 ตำแหน่ง</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button data-tab="core">
-              <span class="nav-icon">🎯</span>
-              <span>Core Competency</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button data-tab="job">
-              <span class="nav-icon">🛠️</span>
-              <span>Job Competency</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button data-tab="matrix">
-              <span class="nav-icon">🧩</span>
-              <span>Matrix & Breakdowns</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button data-tab="idp">
-              <span class="nav-icon">📝</span>
-              <span>IDP Action Plan</span>
-            </button>
-          </li>
-        </ul>
+  <!-- ═══════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">RX</div>
+      <div class="brand-text">
+        <div class="brand-name">Competency 5.0</div>
+        <div class="brand-sub">RX Company · 2024</div>
       </div>
+    </div>
 
-      <div class="sidebar-footer">
-        <button id="btnOpenApiSpec" class="api-spec-btn">
-          <span>⚡ Backend & API Specs</span>
-        </button>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">ANALYTICS</div>
+
+      <button class="nav-item active" data-tab="overview" id="navOverview">
+        <span class="nav-icon">📊</span>
+        <span>ภาพรวมและเป้าหมาย</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <button class="nav-item" data-tab="jd" id="navJD">
+        <span class="nav-icon">📋</span>
+        <span>เกณฑ์ประเมิน 124 ตำแหน่ง</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <div class="nav-section-label">COMPETENCY</div>
+
+      <button class="nav-item" data-tab="core" id="navCore">
+        <span class="nav-icon">🎯</span>
+        <span>Core Competency</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <button class="nav-item" data-tab="job" id="navJob">
+        <span class="nav-icon">🛠️</span>
+        <span>Job Competency</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <button class="nav-item" data-tab="matrix" id="navMatrix">
+        <span class="nav-icon">🧩</span>
+        <span>Matrix Heatmap</span>
+        <span class="nav-dot"></span>
+      </button>
+
+      <div class="nav-section-label">MANAGEMENT</div>
+
+      <button class="nav-item" data-tab="idp" id="navIDP">
+        <span class="nav-icon">📝</span>
+        <span>IDP Action Plan</span>
+        <span class="nav-dot"></span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-year-badge">
+        <span>📅</span>
+        <span>ประจำปี พ.ศ. 2567</span>
       </div>
-    </aside>
+      <button class="api-btn" id="btnOpenApi">
+        ⚡ Backend & API Specs
+      </button>
+    </div>
+  </aside>
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-      
-      <!-- Top Header Controls Bar -->
-      <header class="header-bar">
-        <div class="page-heading">
-          <h1>สรุปผลการประเมิน Competency 2024</h1>
-          <p>ระบบวิเคราะห์และติดตามผลการพัฒนาสมรรถนะบุคลากร RX Company (Light Theme 5.0)</p>
+  <!-- ═══════════════════════════════════════
+       MAIN WRAP
+  ═══════════════════════════════════════ -->
+  <div class="main-wrap">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="topbar-title" id="topbarTitle">ภาพรวมและเป้าหมาย</div>
+          <div class="topbar-sub">การประเมิน Competency ประจำปี 2567 · พนักงาน 281 ท่าน</div>
         </div>
-
-        <div class="filter-bar">
-          <div class="filter-group">
-            <label for="filterYear">รอบประเมิน:</label>
-            <select id="filterYear" class="filter-select">
-              <option value="2024">ประจำปี 2567 (พ.ย.)</option>
-              <option value="2023">ประจำปี 2566</option>
-              <option value="probation">ทดลองงาน 119 วัน</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="filterGroup">กลุ่มงาน:</label>
-            <select id="filterGroup" class="filter-select">
-              <option value="all">ทั้งหมด (281 ท่าน)</option>
-              <option value="office">สำนักงาน (124 ท่าน)</option>
-              <option value="sales">กลุ่มขาย (102 ท่าน)</option>
-              <option value="lasik">กลุ่มเลสิก (56 ท่าน)</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="filterLevel">ระดับงาน:</label>
-            <select id="filterLevel" class="filter-select">
-              <option value="all">ทุกระดับ</option>
-              <option value="staff">พนักงาน (233 ท่าน)</option>
-              <option value="supervisor">หัวหน้างาน (34 ท่าน)</option>
-              <option value="manager">ผู้จัดการ (13 ท่าน)</option>
-            </select>
-          </div>
+      </div>
+      <div class="topbar-right">
+        <div class="filter-row">
+          <span class="filter-label">กลุ่มงาน</span>
+          <select id="filterGroup" class="filter-select">
+            <option value="all">ทั้งหมด (281)</option>
+            <option value="office">สำนักงาน (124)</option>
+            <option value="sales">ขาย (102)</option>
+            <option value="lasik">เลสิก (56)</option>
+          </select>
+          <span class="filter-label">ระดับ</span>
+          <select id="filterLevel" class="filter-select">
+            <option value="all">ทุกระดับ</option>
+            <option value="1">พนักงาน (233)</option>
+            <option value="2">หัวหน้างาน (34)</option>
+            <option value="3">ผู้จัดการ (13)</option>
+          </select>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <!-- TAB 1: OVERVIEW -->
+    <!-- Page Content -->
+    <div class="page-content">
+
+      <!-- ─────────────────────────────────
+           TAB 1: OVERVIEW
+      ───────────────────────────────── -->
       <section id="tab-overview" class="tab-panel active">
-        
-        <!-- KPI Row -->
+
+        <div class="section-header mb-4">
+          <div>
+            <div class="page-eyebrow">Corporate Dashboard</div>
+            <div class="page-h">ภาพรวมผลการประเมิน Competency 2024</div>
+            <div class="page-desc">สรุปผลการประเมิน 281 ท่าน ครอบคลุมทุกกลุ่มงานและระดับตำแหน่ง · ปีงบประมาณ 2567</div>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
         <div class="kpi-grid">
-          
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <span class="kpi-title">ผู้ได้รับการประเมินรวม</span>
-              <div class="kpi-icon-wrapper kpi-icon-primary">👥</div>
+          <div class="kpi-card blue">
+            <div class="kpi-head">
+              <div class="kpi-label">พนักงานที่ได้รับการประเมิน</div>
+              <div class="kpi-ico ico-blue">👥</div>
             </div>
-            <div class="kpi-value-row">
-              <span class="kpi-value">281</span>
-              <span class="kpi-badge badge-success">ครบ 100%</span>
+            <div class="kpi-val">281</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+              <span class="pill pill-blue">สำนักงาน 124</span>
+              <span class="pill pill-blue">ขาย 102</span>
+              <span class="pill pill-blue">เลสิก 56</span>
             </div>
-            <div class="kpi-footer">สำนักงาน 124 | ขาย 102 | เลสิก 56 ท่าน</div>
+            <div class="kpi-foot">ครบ 100% ของพนักงานทั้งหมดในระบบ</div>
           </div>
 
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <span class="kpi-title">Corporate Objective Target</span>
-              <div class="kpi-icon-wrapper kpi-icon-success">🎯</div>
+          <div class="kpi-card green">
+            <div class="kpi-head">
+              <div class="kpi-label">Corporate Objective (Entrepreneurship)</div>
+              <div class="kpi-ico ico-green">🎯</div>
             </div>
-            <div class="kpi-value-row">
-              <span class="kpi-value">20.64%</span>
-              <span class="kpi-badge badge-success">ผ่านเป้าหมาย (≤30%)</span>
+            <div class="kpi-val">20.64%</div>
+            <div style="margin-bottom:6px;">
+              <span class="pill pill-green">✓ ผ่านเป้าหมาย ≤ 30%</span>
             </div>
-            <div class="kpi-footer">Gap Entrepreneurship (ปี 66: 22.67%)</div>
+            <div class="kpi-foot">ปรับตัวดีขึ้นจากปี 2566 ที่ 22.67% (ลดลง 2.03%)</div>
           </div>
 
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <span class="kpi-title">Highest Core Gap</span>
-              <div class="kpi-icon-wrapper kpi-icon-warning">📘</div>
+          <div class="kpi-card amber">
+            <div class="kpi-head">
+              <div class="kpi-label">Core Gap สูงสุด (ทั้งบริษัท)</div>
+              <div class="kpi-ico ico-amber">📘</div>
             </div>
-            <div class="kpi-value-row">
-              <span class="kpi-value">31.32%</span>
-              <span class="kpi-badge badge-danger">Learning Gap</span>
+            <div class="kpi-val">31.32%</div>
+            <div style="margin-bottom:6px;">
+              <span class="pill pill-amber">⚠ Learning Gap</span>
             </div>
-            <div class="kpi-footer">88 คนจากทั้งหมด 281 ท่าน</div>
+            <div class="kpi-foot">88 คน จาก 281 ท่าน ต่ำกว่าระดับที่คาดหวัง</div>
           </div>
 
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <span class="kpi-title">Highest Job Gap</span>
-              <div class="kpi-icon-wrapper kpi-icon-danger">⚙️</div>
+          <div class="kpi-card red">
+            <div class="kpi-head">
+              <div class="kpi-label">Job Gap สูงสุด (ทั้งบริษัท)</div>
+              <div class="kpi-ico ico-red">⚙️</div>
             </div>
-            <div class="kpi-value-row">
-              <span class="kpi-value">45.45%</span>
-              <span class="kpi-badge badge-danger">ความรู้ระบบคุณภาพ</span>
+            <div class="kpi-val">45.45%</div>
+            <div style="margin-bottom:6px;">
+              <span class="pill pill-red">🔴 ความรู้ระบบคุณภาพ</span>
             </div>
-            <div class="kpi-footer">55 คนจากทั้งหมด 121 ท่านที่เกี่ยวข้อง</div>
+            <div class="kpi-foot">55 คน จาก 121 ท่าน ในสายงานที่เกี่ยวข้อง</div>
           </div>
-
         </div>
 
-        <!-- Overview Content Grid -->
-        <div class="content-grid-2">
-          
-          <div class="glass-card">
-            <div class="glass-card-header">
+        <!-- Charts Row -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
               <div>
-                <h3 class="card-title">🎯 Core Competency Gap Overview (5 ด้าน)</h3>
-                <p class="card-subtitle">เปรียบเทียบ % Gap กับเพดานความเสี่ยงเป้าหมาย</p>
+                <div class="card-title">🎯 Core Competency Radar (5 ด้าน)</div>
+                <div class="card-sub">เปรียบเทียบ % Gap กับเป้าหมาย 30% ทั้งองค์กร</div>
               </div>
             </div>
-            <div class="chart-wrapper">
-              <canvas id="chartCoreRadar"></canvas>
+            <div class="card-body">
+              <div class="chart-box"><canvas id="chartRadar"></canvas></div>
             </div>
           </div>
 
-          <div class="glass-card">
-            <div class="glass-card-header">
+          <div class="card">
+            <div class="card-header">
               <div>
-                <h3 class="card-title">🛠️ Top 5 Job Competency Gaps</h3>
-                <p class="card-subtitle">หัวข้อสมรรถนะในงานที่มีสัดส่วน Gap สูงสุดในบริษัท</p>
+                <div class="card-title">🛠 Top 5 Job Competency Gaps</div>
+                <div class="card-sub">หัวข้อสมรรถนะงานที่มี % Gap สูงสุดในบริษัท</div>
               </div>
             </div>
-            <div class="chart-wrapper">
-              <canvas id="chartJobTop"></canvas>
+            <div class="card-body">
+              <div class="chart-box"><canvas id="chartJobBar"></canvas></div>
             </div>
           </div>
-
         </div>
 
-        <!-- Summary Table Card -->
-        <div class="glass-card">
-          <div class="glass-card-header">
+        <!-- Summary Table -->
+        <div class="card mb-4">
+          <div class="card-header">
             <div>
-              <h3 class="card-title">📋 สรุปผล Core Competency รายหัวข้อ (ปี 2567)</h3>
-              <p class="card-subtitle">ข้อมูลพนักงาน 281 ท่าน ทุกกลุ่มงานและทุกระดับตำแหน่ง</p>
+              <div class="card-title">📋 สรุปผล Core Competency รายหัวข้อ</div>
+              <div class="card-sub">ข้อมูลรวมพนักงานทั้งหมด 281 ท่าน · ปี 2567</div>
             </div>
           </div>
-
-          <div class="table-container">
-            <table class="custom-table">
+          <div class="tbl-wrap">
+            <table class="tbl">
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>RX Core Competency</th>
-                  <th>จำนวนพนักงานทั้งหมด</th>
-                  <th>จำนวนที่มี Gap (ต่ำกว่าคาดหวัง)</th>
-                  <th>สัดส่วน % Competency Gap</th>
+                  <th>พนักงานทั้งหมด</th>
+                  <th>จำนวนที่มี Gap</th>
+                  <th>% Gap</th>
+                  <th>สัดส่วน</th>
                 </tr>
               </thead>
-              <tbody id="tableCoreSummaryBody">
-                <!-- Injected via app.js -->
-              </tbody>
+              <tbody id="tblCoreSummary"></tbody>
             </table>
           </div>
         </div>
 
       </section>
 
-      <!-- TAB 2: NEW JD MATRIX & POSITION DIRECTORY -->
+      <!-- ─────────────────────────────────
+           TAB 2: JD MATRIX
+      ───────────────────────────────── -->
       <section id="tab-jd" class="tab-panel">
-        <div class="glass-card">
-          <div class="glass-card-header">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">JD Competency & OJT Matrix</div>
+            <div class="page-h">เกณฑ์ประเมินสมรรถนะ 124 รายตำแหน่ง</div>
+            <div class="page-desc">ถอดข้อมูลจากไฟล์ JD List _ Competency _ OJT.xlsx · แสดงหัวข้อที่แต่ละตำแหน่งต้องถูกประเมิน</div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
             <div>
-              <h3 class="card-title">📋 เกณฑ์ประเมินสมรรถนะ 124 รายตำแหน่ง (JD Competency & OJT Matrix)</h3>
-              <p class="card-subtitle">ถอดข้อมูลจากไฟล์ JD List _ Competency _ OJT.xlsx เพื่อดูว่าแต่ละตำแหน่งต้องถูกประเมินหัวข้อใดบ้าง</p>
+              <div class="card-title">🔍 ค้นหาและกรองตำแหน่งงาน</div>
+              <div class="card-sub">ค้นหาด้วยชื่อตำแหน่ง รหัส JD หรือหน่วยงาน</div>
             </div>
-            <div id="jdResultCount" style="font-weight: 700; color: var(--primary);">พบทั้งหมด 124 ตำแหน่ง</div>
+            <span class="result-count" id="jdCount">124 ตำแหน่ง</span>
           </div>
-
-          <!-- Search & Filter Controls -->
-          <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
-            <input type="text" id="inputJDSearch" class="search-input" placeholder="🔍 ค้นหาชื่อตำแหน่ง, รหัส JD หรือหน่วยงาน..." />
-            
-            <div class="filter-group">
-              <label for="selectJDDept">หน่วยงาน (Dept):</label>
-              <select id="selectJDDept" class="filter-select">
+          <div class="card-body" style="padding-bottom:0;">
+            <div class="jd-controls">
+              <input type="text" class="search-box" id="searchJD" placeholder="🔍  พิมพ์ชื่อตำแหน่ง, รหัส JD, หรือหน่วยงาน...">
+              <select id="jdDept" class="filter-select">
                 <option value="all">ทุกหน่วยงาน</option>
-                <option value="ACC">ACC (บัญชี&การเงิน)</option>
-                <option value="CHD">CHD (แคชเชียร์)</option>
-                <option value="CMP">CMP (บริหารค่าตอบแทน)</option>
-                <option value="CRD">CRD (บริหารลูกหนี้)</option>
-                <option value="HRD">HRD (ทรัพยากรบุคคล)</option>
-                <option value="ITD">ITD (สารสนเทศ)</option>
-                <option value="MNG">MNG (บริหารจัดการ)</option>
-                <option value="PSA">PSA (ธุรการขาย)</option>
-                <option value="REG">REG (ขึ้นทะเบียนผลิตภัณฑ์)</option>
-                <option value="ENG">ENG (วิศวกรรมช่าง)</option>
-                <option value="REX">REX (รถพยาบาลและบริการ)</option>
+                <option value="ACC">ACC · บัญชีและการเงิน</option>
+                <option value="CHD">CHD · แคชเชียร์</option>
+                <option value="CMP">CMP · บริหารค่าตอบแทน</option>
+                <option value="CRD">CRD · บริหารลูกหนี้</option>
+                <option value="ENG">ENG · วิศวกรรมช่าง</option>
+                <option value="HRD">HRD · ทรัพยากรบุคคล</option>
+                <option value="ITD">ITD · สารสนเทศ</option>
+                <option value="MNG">MNG · บริหารจัดการ</option>
+                <option value="PSA">PSA · ธุรการขาย</option>
+                <option value="REG">REG · ขึ้นทะเบียนผลิตภัณฑ์</option>
+                <option value="REX">REX · รถพยาบาลและบริการ</option>
               </select>
-            </div>
-
-            <div class="filter-group">
-              <label for="selectJDLevel">ระดับตำแหน่ง:</label>
-              <select id="selectJDLevel" class="filter-select">
+              <select id="jdLevel" class="filter-select">
                 <option value="all">ทุกระดับ</option>
-                <option value="1">Level 1 (พนักงาน)</option>
-                <option value="2">Level 2 (หัวหน้างาน)</option>
-                <option value="3">Level 3 (ผู้จัดการ)</option>
+                <option value="1">Level 1 · พนักงาน</option>
+                <option value="2">Level 2 · หัวหน้างาน</option>
+                <option value="3">Level 3 · ผู้จัดการ</option>
               </select>
             </div>
           </div>
-
-          <div class="table-container">
-            <table class="custom-table">
+          <div class="tbl-wrap">
+            <table class="tbl">
               <thead>
                 <tr>
                   <th>รหัส JD</th>
-                  <th>หน่วยงาน</th>
+                  <th>แผนก</th>
                   <th>ชื่อตำแหน่งงาน</th>
-                  <th>ระดับตำแหน่ง</th>
-                  <th>จำนวนหัวข้อที่ต้องประเมิน</th>
-                  <th>หัวข้อ Competency ที่ต้องประเมิน (Core + Knowledge + Skills)</th>
+                  <th>ระดับ</th>
+                  <th>จำนวนหัวข้อ</th>
+                  <th>Competency ที่ต้องประเมิน</th>
                 </tr>
               </thead>
-              <tbody id="tableJDMatrixBody">
-                <!-- Injected via app.js -->
-              </tbody>
+              <tbody id="tblJD"></tbody>
             </table>
           </div>
         </div>
+
       </section>
 
-      <!-- TAB 3: CORE COMPETENCY -->
+      <!-- ─────────────────────────────────
+           TAB 3: CORE COMPETENCY
+      ───────────────────────────────── -->
       <section id="tab-core" class="tab-panel">
-        <div class="content-grid-2">
-          <div class="glass-card">
-            <div class="glass-card-header">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Core Competency Analysis</div>
+            <div class="page-h">วิเคราะห์ Core Competency แยกรายระดับตำแหน่ง</div>
+            <div class="page-desc">5 สมรรถนะหลัก · เปรียบเทียบ พนักงาน vs หัวหน้างาน vs ผู้จัดการ</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
               <div>
-                <h3 class="card-title">👔 Core Competency Gap แยกตามระดับตำแหน่ง</h3>
-                <p class="card-subtitle">เปรียบเทียบ พนักงาน (233) vs หัวหน้างาน (34) vs ผู้จัดการ (14)</p>
+                <div class="card-title">📊 Core Gap แยกตามระดับตำแหน่ง</div>
+                <div class="card-sub">แสดง % Gap ของ 5 Core Competency ในแต่ละ Level</div>
               </div>
             </div>
-            <div class="chart-wrapper">
-              <canvas id="chartCoreByLevel"></canvas>
+            <div class="card-body">
+              <div class="chart-box"><canvas id="chartCoreLevel"></canvas></div>
             </div>
           </div>
 
-          <div class="glass-card">
-            <div class="glass-card-header">
+          <div class="card">
+            <div class="card-header">
               <div>
-                <h3 class="card-title">💡 ข้อค้นพบสำคัญใน Core Competencies</h3>
-                <p class="card-subtitle">Insights & Action Items รายระดับ</p>
+                <div class="card-title">💡 Key Insights รายระดับตำแหน่ง</div>
+                <div class="card-sub">สิ่งที่ค้นพบและข้อเสนอแนะเชิงพัฒนา</div>
               </div>
             </div>
-
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-              <div style="background: var(--primary-light); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--primary);">
-                <strong style="color: var(--primary);">ระดับพนักงาน (233 ท่าน)</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                  มี Gap เรื่อง <strong>Learning</strong> มากที่สุดถึง <strong>29.18% (68 คน)</strong> แต่ Relationship มี Gap น้อยที่สุดเพียง 1.29%
-                </p>
-              </div>
-
-              <div style="background: var(--warning-light); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--warning);">
-                <strong style="color: var(--warning);">ระดับหัวหน้างาน (34 ท่าน)</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                  มี Gap เรื่อง <strong>Innovative Thinking</strong> สูงสุดถึง <strong>58.82% (20 คน)</strong> ตามด้วย Entrepreneurship (50%)
-                </p>
-              </div>
-
-              <div style="background: var(--danger-light); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--danger);">
-                <strong style="color: var(--danger);">ระดับผู้จัดการ (14 ท่าน)</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                  มี Gap เรื่อง <strong>FACT</strong> สูงสุดถึง <strong>71.43% (10 คน)</strong> รองลงมาคือ Innovative Thinking (57.14%)
-                </p>
+            <div class="card-body">
+              <div class="insight-row">
+                <div class="insight-box blue">
+                  <div class="insight-head">👤 ระดับพนักงาน — 233 ท่าน (Level 1)</div>
+                  <div class="insight-body">
+                    Gap สูงสุด: <strong>Learning 29.18%</strong> (68 คน)<br>
+                    Gap ต่ำสุด: Relationship Excellence เพียง <strong>1.29%</strong><br>
+                    ข้อเสนอแนะ: จัดโปรแกรม Self-Learning / E-Learning สำหรับพนักงานระดับต้น
+                  </div>
+                </div>
+                <div class="insight-box amber">
+                  <div class="insight-head">👔 ระดับหัวหน้างาน — 34 ท่าน (Level 2)</div>
+                  <div class="insight-body">
+                    Gap สูงสุด: <strong>Innovative Thinking 58.82%</strong> (20 คน)<br>
+                    Entrepreneurship มี Gap <strong>50.00%</strong><br>
+                    ข้อเสนอแนะ: Workshop Creative Thinking + Leadership Development
+                  </div>
+                </div>
+                <div class="insight-box red">
+                  <div class="insight-head">🏢 ระดับผู้จัดการ — 14 ท่าน (Level 3)</div>
+                  <div class="insight-body">
+                    Gap สูงสุด: <strong>Fact 71.43%</strong> (10 คน)<br>
+                    Innovative Thinking <strong>57.14%</strong> · Relationship <strong>50%</strong><br>
+                    ข้อเสนอแนะ: Executive Coaching + Data-Driven Decision Making
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- TAB 4: JOB COMPETENCY -->
-      <section id="tab-job" class="tab-panel">
-        <div class="glass-card" style="margin-bottom: 1.5rem;">
-          <div class="glass-card-header">
-            <div>
-              <h3 class="card-title">📖 โครงสร้าง Job Competency (37 ข้อ)</h3>
-              <p class="card-subtitle">แบ่งเป็น Knowledge (6 ข้อ) และ Skill (31 ข้อ)</p>
-            </div>
+        <!-- Core detail table -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="card-title">📋 ตารางผล Core Competency รายระดับตำแหน่ง</div>
           </div>
-
-          <div class="content-grid-3">
-            <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-              <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">🏢 สำนักงาน Top Gaps</h4>
-              <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.8;">
-                <li>ความรู้ด้านระบบคุณภาพ: <strong>46.60% (48 คน)</strong></li>
-                <li>การสื่อสาร: <strong>20.50% (33 คน)</strong></li>
-                <li>การแก้ไขปัญหา/ตัดสินใจ: <strong>15.15% (35 คน)</strong></li>
-              </ul>
-            </div>
-
-            <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-              <h4 style="color: var(--warning); margin-bottom: 0.5rem;">📈 กลุ่มงานขาย Top Gaps</h4>
-              <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.8;">
-                <li>การวิเคราะห์ข้อมูล: <strong>26.26% (26 คน)</strong></li>
-                <li>การแก้ไขปัญหา/ตัดสินใจ: <strong>23.75% (19 คน)</strong></li>
-                <li>การนำเสนอ (Presentation): <strong>16.67% (5 คน)</strong></li>
-              </ul>
-            </div>
-
-            <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">👁️ กลุ่มงานเลสิก Top Gaps</h4>
-              <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.8;">
-                <li>การปฏิบัติงานตามขั้นตอน & เอกสาร: <strong>14.29% (7 คน)</strong></li>
-                <li>การแก้ไขปัญหา/ตัดสินใจ: <strong>10.20% (5 คน)</strong></li>
-                <li>ความรู้ทางเลสิค: <strong>3.70% (2 คน)</strong></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 5: MATRIX & BREAKDOWNS -->
-      <section id="tab-matrix" class="tab-panel">
-        <div class="glass-card">
-          <div class="glass-card-header">
-            <div>
-              <h3 class="card-title">🧩 ตารางเปรียบเทียบ Core Competency Heatmap Matrix</h3>
-              <p class="card-subtitle">แสดงสัดส่วน % Competency Gap แยกรายกลุ่มงานและรายระดับตำแหน่ง</p>
-            </div>
-          </div>
-
-          <div class="table-container">
-            <table class="custom-table">
+          <div class="tbl-wrap">
+            <table class="tbl">
               <thead>
                 <tr>
-                  <th rowspan="2">RX Competency</th>
-                  <th rowspan="2">รวมทั้งบริษัท</th>
-                  <th colspan="3" style="text-align: center; border-bottom: 1px solid var(--border-color);">กลุ่มงาน (Department)</th>
-                  <th colspan="3" style="text-align: center; border-bottom: 1px solid var(--border-color);">ระดับตำแหน่ง (Job Level)</th>
-                </tr>
-                <tr>
-                  <th>สำนักงาน</th>
-                  <th>ขาย</th>
-                  <th>เลสิก</th>
-                  <th>พนักงาน</th>
-                  <th>หัวหน้างาน</th>
-                  <th>ผู้จัดการ</th>
+                  <th>Core Competency</th>
+                  <th>รวม (281)</th>
+                  <th>พนักงาน (233)</th>
+                  <th>หัวหน้างาน (34)</th>
+                  <th>ผู้จัดการ (14)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><strong>Relationship Excellence</strong></td>
-                  <td>6.41%</td>
-                  <td>2.44%</td>
-                  <td>7.84%</td>
-                  <td>12.50%</td>
-                  <td>1.29%</td>
-                  <td><span class="gap-tag gap-medium">23.53%</span></td>
-                  <td><span class="gap-tag gap-high">50.00%</span></td>
+                  <td><span class="hm-cell hm-low">6.41%</span></td>
+                  <td><span class="hm-cell hm-low">1.29%</span></td>
+                  <td><span class="hm-cell hm-medium">23.53%</span></td>
+                  <td><span class="hm-cell hm-high">50.00%</span></td>
                 </tr>
                 <tr>
                   <td><strong>Fact</strong></td>
-                  <td>12.81%</td>
-                  <td>10.57%</td>
-                  <td>14.71%</td>
-                  <td>14.29%</td>
-                  <td>4.72%</td>
-                  <td><span class="gap-tag gap-medium">44.12%</span></td>
-                  <td><span class="gap-tag gap-high">71.43%</span></td>
+                  <td><span class="hm-cell hm-low">12.81%</span></td>
+                  <td><span class="hm-cell hm-low">4.72%</span></td>
+                  <td><span class="hm-cell hm-medium">44.12%</span></td>
+                  <td><span class="hm-cell hm-high">71.43%</span></td>
                 </tr>
                 <tr>
                   <td><strong>Innovative Thinking</strong></td>
-                  <td><span class="gap-tag gap-high">25.62%</span></td>
-                  <td><span class="gap-tag gap-high">28.46%</span></td>
-                  <td><span class="gap-tag gap-high">25.49%</span></td>
-                  <td>19.64%</td>
-                  <td>18.88%</td>
-                  <td><span class="gap-tag gap-high">58.82%</span></td>
-                  <td><span class="gap-tag gap-high">57.14%</span></td>
+                  <td><span class="hm-cell hm-medium">25.62%</span></td>
+                  <td><span class="hm-cell hm-medium">18.88%</span></td>
+                  <td><span class="hm-cell hm-high">58.82%</span></td>
+                  <td><span class="hm-cell hm-high">57.14%</span></td>
                 </tr>
                 <tr>
                   <td><strong>Learning</strong></td>
-                  <td><span class="gap-tag gap-high">31.32%</span></td>
-                  <td><span class="gap-tag gap-high">39.84%</span></td>
-                  <td>22.55%</td>
-                  <td><span class="gap-tag gap-high">28.57%</span></td>
-                  <td><span class="gap-tag gap-high">29.18%</span></td>
-                  <td><span class="gap-tag gap-medium">38.24%</span></td>
-                  <td><span class="gap-tag gap-high">50.00%</span></td>
+                  <td><span class="hm-cell hm-high">31.32%</span></td>
+                  <td><span class="hm-cell hm-medium">29.18%</span></td>
+                  <td><span class="hm-cell hm-medium">38.24%</span></td>
+                  <td><span class="hm-cell hm-high">50.00%</span></td>
                 </tr>
                 <tr>
                   <td><strong>Entrepreneurship</strong></td>
-                  <td>20.64%</td>
-                  <td>21.95%</td>
-                  <td>18.63%</td>
-                  <td>21.43%</td>
-                  <td>15.02%</td>
-                  <td><span class="gap-tag gap-high">50.00%</span></td>
-                  <td><span class="gap-tag gap-medium">42.86%</span></td>
+                  <td><span class="hm-cell hm-medium">20.64%</span></td>
+                  <td><span class="hm-cell hm-low">15.02%</span></td>
+                  <td><span class="hm-cell hm-high">50.00%</span></td>
+                  <td><span class="hm-cell hm-medium">42.86%</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+
       </section>
 
-      <!-- TAB 6: IDP ACTION PLAN -->
-      <section id="tab-idp" class="tab-panel">
-        <div class="glass-card">
-          <div class="glass-card-header">
-            <div>
-              <h3 class="card-title">📝 แผนพัฒนาพนักงานรายบุคคล (IDP - Individual Development Plan)</h3>
-              <p class="card-subtitle">สำหรับพนักงานที่มีผลประเมินต่ำกว่าระดับที่คาดหวัง (Gap > 0)</p>
+      <!-- ─────────────────────────────────
+           TAB 4: JOB COMPETENCY
+      ───────────────────────────────── -->
+      <section id="tab-job" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Job Competency Analysis</div>
+            <div class="page-h">วิเคราะห์ Job Competency (Knowledge + Skills)</div>
+            <div class="page-desc">Knowledge 6 หัวข้อ · Skills 31 หัวข้อ · แยกตามกลุ่มงาน</div>
+          </div>
+        </div>
+
+        <!-- Dept gap cards -->
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏢 กลุ่มงานสำนักงาน</div>
             </div>
-            <button class="btn-primary" onclick="alert('ระบบเปิดฟอร์มสร้างแผนพัฒนา IDP ใหม่')">+ เพิ่มแผน IDP ใหม่</button>
+            <div class="card-body">
+              <div class="insight-row">
+                <div>
+                  <div style="font-size:.78rem;color:var(--text-500);margin-bottom:8px;font-weight:600;">TOP GAPS</div>
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>ความรู้ระบบคุณภาพ</span><strong>46.6%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill red" style="width:46.6%"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>การสื่อสาร</span><strong>20.5%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill amber" style="width:20.5%"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>การแก้ไขปัญหาและการตัดสินใจ</span><strong>15.15%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill blue" style="width:15.15%"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                        <span>การปฏิบัติงานตามขั้นตอน &amp; เอกสาร</span><strong>8.92%</strong>
+                      </div>
+                      <div class="bar-bg"><div class="bar-fill green" style="width:8.92%"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="table-container">
-            <table class="custom-table">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 กลุ่มงานขาย</div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การวิเคราะห์ข้อมูล</span><strong>26.26%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill red" style="width:26.26%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การแก้ไขปัญหาและการตัดสินใจ</span><strong>23.75%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill amber" style="width:23.75%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การนำเสนอ (Presentation)</span><strong>16.67%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill blue" style="width:16.67%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>ทักษะการขาย (Selling Skill)</span><strong>7.35%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill green" style="width:7.35%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👁️ กลุ่มงานเลสิก</div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การปฏิบัติงานตามขั้นตอน &amp; เอกสาร</span><strong>14.29%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill red" style="width:14.29%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>การแก้ไขปัญหาและการตัดสินใจ</span><strong>10.20%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill amber" style="width:10.20%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.8rem;">
+                    <span>ความรู้ทางเลสิค</span><strong>3.70%</strong>
+                  </div>
+                  <div class="bar-bg"><div class="bar-fill blue" style="width:3.70%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job Level gaps -->
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👤 พนักงาน Level 1 — Top Gaps</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Competency</th><th>จาก</th><th>Gap %</th></tr></thead>
+                <tbody>
+                  <tr><td>ความรู้ระบบคุณภาพ</td><td>103</td><td><span class="tag tag-red">46.60%</span></td></tr>
+                  <tr><td>การสื่อสาร</td><td>161</td><td><span class="tag tag-amber">20.50%</span></td></tr>
+                  <tr><td>การแก้ไขปัญหาและการตัดสินใจ</td><td>231</td><td><span class="tag tag-blue">15.15%</span></td></tr>
+                  <tr><td>การปฏิบัติงานตามขั้นตอน &amp; เอกสาร</td><td>157</td><td><span class="tag tag-green">8.92%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👔 หัวหน้างาน Level 2 — Top Gaps</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Competency</th><th>จาก</th><th>Gap %</th></tr></thead>
+                <tbody>
+                  <tr><td>การวิเคราะห์ข้อมูล</td><td>34</td><td><span class="tag tag-red">64.71%</span></td></tr>
+                  <tr><td>การบริหารจัดการ</td><td>24</td><td><span class="tag tag-red">50.00%</span></td></tr>
+                  <tr><td>การปฏิบัติงานเชิงกลยุทธ์</td><td>30</td><td><span class="tag tag-amber">46.67%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏢 ผู้จัดการ Level 3 — Top Gaps</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Competency</th><th>จาก</th><th>Gap %</th></tr></thead>
+                <tbody>
+                  <tr><td>ภาวะผู้นำ (Leadership)</td><td>11</td><td><span class="tag tag-red">81.82%</span></td></tr>
+                  <tr><td>การสอนงานและพัฒนาพนักงาน</td><td>10</td><td><span class="tag tag-red">70.00%</span></td></tr>
+                  <tr><td>การวิเคราะห์ข้อมูล</td><td>10</td><td><span class="tag tag-red">70.00%</span></td></tr>
+                  <tr><td>การปฏิบัติงานเชิงกลยุทธ์</td><td>12</td><td><span class="tag tag-amber">66.67%</span></td></tr>
+                  <tr><td>การบริหารบุคลากร</td><td>11</td><td><span class="tag tag-amber">63.64%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ─────────────────────────────────
+           TAB 5: MATRIX HEATMAP
+      ───────────────────────────────── -->
+      <section id="tab-matrix" class="tab-panel">
+
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Competency Matrix</div>
+            <div class="page-h">Heatmap Matrix เปรียบเทียบทุกมิติ</div>
+            <div class="page-desc">สัดส่วน % Gap แยกตามกลุ่มงาน (3 กลุ่ม) และระดับตำแหน่ง (3 ระดับ)</div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="card-title">🧩 Core Competency Gap Heatmap (ทุกมิติ)</div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
               <thead>
                 <tr>
-                  <th>IDP Code</th>
-                  <th>ชื่อ-นามสกุล</th>
-                  <th>ระดับตำแหน่ง</th>
-                  <th>กลุ่มงาน</th>
-                  <th>สมรรถนะที่เป็น Gap</th>
-                  <th>สถานะแผนพัฒนา</th>
-                  <th>กำหนดเสร็จ</th>
-                  <th>การจัดการ</th>
+                  <th rowspan="2" style="vertical-align:middle;">Core Competency</th>
+                  <th rowspan="2" style="vertical-align:middle;text-align:center;">บริษัท (281)</th>
+                  <th colspan="3" style="text-align:center;border-left:2px solid var(--border);">กลุ่มงาน</th>
+                  <th colspan="3" style="text-align:center;border-left:2px solid var(--border);">ระดับตำแหน่ง</th>
+                </tr>
+                <tr>
+                  <th style="border-left:2px solid var(--border);">สำนักงาน (124)</th>
+                  <th>ขาย (102)</th>
+                  <th>เลสิก (56)</th>
+                  <th style="border-left:2px solid var(--border);">พนักงาน (233)</th>
+                  <th>หัวหน้างาน (34)</th>
+                  <th>ผู้จัดการ (14)</th>
                 </tr>
               </thead>
-              <tbody id="tableIDPBody">
-                <!-- Injected via app.js -->
+              <tbody>
+                <tr>
+                  <td><strong>Relationship Excellence</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">6.41%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">2.44%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">7.84%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">12.50%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">1.29%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">23.53%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">50.00%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Fact</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">12.81%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">10.57%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">14.71%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">14.29%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">4.72%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">44.12%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">71.43%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Innovative Thinking</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">25.62%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-medium">28.46%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">25.49%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">19.64%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">18.88%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">58.82%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">57.14%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Learning</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">31.32%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-high">39.84%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">22.55%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">28.57%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-medium">29.18%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">38.24%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">50.00%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Entrepreneurship</strong></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">20.64%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-medium">21.95%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-low">18.63%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">21.43%</span></td>
+                  <td style="text-align:center;border-left:2px solid var(--border-soft)"><span class="hm-cell hm-low">15.02%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-high">50.00%</span></td>
+                  <td style="text-align:center"><span class="hm-cell hm-medium">42.86%</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
+          <div class="stat-row">
+            <div class="stat-item" style="display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--text-500);">
+              <span class="hm-cell hm-high" style="font-size:.7rem;">≥ 30%</span> Gap สูง — ต้องแก้ไขเร่งด่วน
+              &nbsp;&nbsp;
+              <span class="hm-cell hm-medium" style="font-size:.7rem;">15–30%</span> Gap ปานกลาง — ควรติดตาม
+              &nbsp;&nbsp;
+              <span class="hm-cell hm-low" style="font-size:.7rem;">&lt; 15%</span> Gap ต่ำ — อยู่ในเกณฑ์ดี
+            </div>
+          </div>
         </div>
+
       </section>
 
-    </main>
-  </div>
+      <!-- ─────────────────────────────────
+           TAB 6: IDP
+      ───────────────────────────────── -->
+      <section id="tab-idp" class="tab-panel">
 
-  <!-- BACKEND & API SPECS MODAL DRAWER -->
-  <div id="apiModal" class="modal-overlay">
-    <div class="modal-container">
-      <div class="modal-header">
-        <div class="modal-title">⚡ Backend Integration & REST API Architecture Specification</div>
-        <button id="btnCloseApiSpec" class="modal-close-btn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p style="margin-bottom: 1rem;">
-          คู่มือและ RESTful API Endpoints Specification สำหรับวิศวกรซอฟต์แวร์ Backend เพื่อนำไปเขียนต่อเชื่อมต่อฐานข้อมูล SQL/NoSQL และ Business Logic
-        </p>
+        <div class="section-header">
+          <div>
+            <div class="page-eyebrow">Individual Development Plan</div>
+            <div class="page-h">แผนพัฒนาพนักงานรายบุคคล (IDP)</div>
+            <div class="page-desc">สำหรับพนักงานที่มีผลประเมินต่ำกว่าระดับที่คาดหวัง (Competency Gap &gt; 0)</div>
+          </div>
+          <button class="btn btn-primary" onclick="alert('เปิดฟอร์มสร้างแผน IDP ใหม่')">+ สร้างแผน IDP ใหม่</button>
+        </div>
 
-        <h4 style="color: var(--primary); margin-top: 1rem;">1. GET /api/v1/jd-positions</h4>
-        <div class="code-block">// Endpoint to fetch all 124 JD Competency mappings
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="card-title">📝 รายการแผนพัฒนาพนักงาน</div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>รหัส IDP</th>
+                  <th>ชื่อ-สกุล</th>
+                  <th>ระดับตำแหน่ง</th>
+                  <th>กลุ่มงาน</th>
+                  <th>Competency Gap</th>
+                  <th>สถานะ</th>
+                  <th>กำหนดเสร็จ</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="tblIDP"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+    </div><!-- /page-content -->
+  </div><!-- /main-wrap -->
+</div><!-- /app-shell -->
+
+<!-- ═══════════════════════════════════════
+     MODAL: API SPECS
+═══════════════════════════════════════ -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">⚡ Backend Integration & REST API Specification</div>
+      <button class="modal-close" id="btnCloseApi">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:12px;">คู่มือ RESTful API Endpoints สำหรับวิศวกร Backend นำไปเขียนต่อเชื่อมต่อฐานข้อมูล SQL/NoSQL ได้ทันที</p>
+
+      <div class="endpoint-title">① GET /api/v1/competency/summary</div>
+      <div class="code-block">// Response 200 OK
+{
+  "year": 2024,
+  "totalEvaluated": 281,
+  "breakdown": { "office": 124, "sales": 102, "lasik": 56 },
+  "levels": { "staff": 233, "supervisor": 34, "manager": 14 },
+  "corporateObjective": {
+    "kpi": "Entrepreneurship Gap",
+    "target": 30.0,
+    "actual": 20.64,
+    "passed": true,
+    "prev": 22.67
+  }
+}</div>
+
+      <div class="endpoint-title">② GET /api/v1/competency/core-gaps?level={level}&dept={dept}</div>
+      <div class="code-block">// SQL Query Example
+SELECT
+  c.name AS competency_name,
+  COUNT(*) AS total_evaluated,
+  SUM(CASE WHEN e.score &lt; e.expected_level THEN 1 ELSE 0 END) AS gap_count,
+  ROUND(SUM(CASE WHEN e.score &lt; e.expected_level THEN 1 ELSE 0 END)
+        * 100.0 / COUNT(*), 2) AS gap_pct
+FROM evaluations e
+JOIN competencies c ON e.competency_id = c.id
+WHERE c.type = 'core'
+GROUP BY c.id, c.name
+ORDER BY gap_pct DESC;</div>
+
+      <div class="endpoint-title">③ GET /api/v1/jd-positions?dept={dept}&level={level}</div>
+      <div class="code-block">// Response: 124 positions
 {
   "total": 124,
   "data": [
@@ -530,29 +796,29 @@
       "dept": "ACC",
       "title": "ผจก.บัญชีและการเงิน",
       "level": 3,
-      "totalCount": 13,
-      "competencies": ["Relationship Excellence", "Fact", "Learning", "ความรู้ด้านระบบคุณภาพ", ...]
+      "totalCompetencies": 13,
+      "competencies": [
+        "Relationship Excellence", "Fact", "Learning",
+        "ความรู้ด้านระบบคุณภาพ", "การวิเคราะห์ข้อมูล", ...
+      ]
     }
   ]
 }</div>
 
-        <h4 style="color: var(--primary); margin-top: 1rem;">2. GET /api/v1/competency/summary</h4>
-        <div class="code-block">// Response Payload Sample (200 OK)
+      <div class="endpoint-title">④ POST /api/v1/idp/plans</div>
+      <div class="code-block">// Request Body
 {
-  "status": "success",
-  "year": 2024,
-  "totalEvaluated": 281,
-  "corporateObjective": {
-    "targetGapMaxPct": 30.0,
-    "currentGapPct": 20.64,
-    "isTargetAchieved": true
-  }
+  "employeeId": "EMP-001",
+  "competencyId": "COMP-CORE-LEARNING",
+  "gapScore": 1,
+  "actionPlan": "เข้าอบรม E-Learning & Self Development Program",
+  "targetDate": "2024-12-31",
+  "supervisorId": "EMP-BOSS-01"
 }</div>
-      </div>
     </div>
   </div>
+</div>
 
-  <!-- App Script -->
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
