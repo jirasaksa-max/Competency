@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RX Competency Assessment 2024 - 5.0 Enterprise Dashboard</title>
+  <title>RX Competency Assessment 5.0 Dashboard (Light Theme)</title>
 
   <!-- Google Fonts: Plus Jakarta Sans & Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
 
   <div class="app-container">
     
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar Navigation (Executive Dark Slate Contrast) -->
     <aside class="sidebar">
       <div>
         <div class="brand-logo">
@@ -36,6 +36,12 @@
             <button data-tab="overview">
               <span class="nav-icon">📊</span>
               <span>ภาพรวม & เป้าหมาย</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button data-tab="jd">
+              <span class="nav-icon">📋</span>
+              <span>เกณฑ์ประเมิน 124 ตำแหน่ง</span>
             </button>
           </li>
           <li class="nav-item">
@@ -79,7 +85,7 @@
       <header class="header-bar">
         <div class="page-heading">
           <h1>สรุปผลการประเมิน Competency 2024</h1>
-          <p>ระบบวิเคราะห์และติดตามผลการพัฒนาสมรรถนะบุคลากร RX Company</p>
+          <p>ระบบวิเคราะห์และติดตามผลการพัฒนาสมรรถนะบุคลากร RX Company (Light Theme 5.0)</p>
         </div>
 
         <div class="filter-bar">
@@ -227,9 +233,72 @@
 
       </section>
 
-      <!-- TAB 2: CORE COMPETENCY -->
+      <!-- TAB 2: NEW JD MATRIX & POSITION DIRECTORY -->
+      <section id="tab-jd" class="tab-panel">
+        <div class="glass-card">
+          <div class="glass-card-header">
+            <div>
+              <h3 class="card-title">📋 เกณฑ์ประเมินสมรรถนะ 124 รายตำแหน่ง (JD Competency & OJT Matrix)</h3>
+              <p class="card-subtitle">ถอดข้อมูลจากไฟล์ JD List _ Competency _ OJT.xlsx เพื่อดูว่าแต่ละตำแหน่งต้องถูกประเมินหัวข้อใดบ้าง</p>
+            </div>
+            <div id="jdResultCount" style="font-weight: 700; color: var(--primary);">พบทั้งหมด 124 ตำแหน่ง</div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+            <input type="text" id="inputJDSearch" class="search-input" placeholder="🔍 ค้นหาชื่อตำแหน่ง, รหัส JD หรือหน่วยงาน..." />
+            
+            <div class="filter-group">
+              <label for="selectJDDept">หน่วยงาน (Dept):</label>
+              <select id="selectJDDept" class="filter-select">
+                <option value="all">ทุกหน่วยงาน</option>
+                <option value="ACC">ACC (บัญชี&การเงิน)</option>
+                <option value="CHD">CHD (แคชเชียร์)</option>
+                <option value="CMP">CMP (บริหารค่าตอบแทน)</option>
+                <option value="CRD">CRD (บริหารลูกหนี้)</option>
+                <option value="HRD">HRD (ทรัพยากรบุคคล)</option>
+                <option value="ITD">ITD (สารสนเทศ)</option>
+                <option value="MNG">MNG (บริหารจัดการ)</option>
+                <option value="PSA">PSA (ธุรการขาย)</option>
+                <option value="REG">REG (ขึ้นทะเบียนผลิตภัณฑ์)</option>
+                <option value="ENG">ENG (วิศวกรรมช่าง)</option>
+                <option value="REX">REX (รถพยาบาลและบริการ)</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="selectJDLevel">ระดับตำแหน่ง:</label>
+              <select id="selectJDLevel" class="filter-select">
+                <option value="all">ทุกระดับ</option>
+                <option value="1">Level 1 (พนักงาน)</option>
+                <option value="2">Level 2 (หัวหน้างาน)</option>
+                <option value="3">Level 3 (ผู้จัดการ)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>รหัส JD</th>
+                  <th>หน่วยงาน</th>
+                  <th>ชื่อตำแหน่งงาน</th>
+                  <th>ระดับตำแหน่ง</th>
+                  <th>จำนวนหัวข้อที่ต้องประเมิน</th>
+                  <th>หัวข้อ Competency ที่ต้องประเมิน (Core + Knowledge + Skills)</th>
+                </tr>
+              </thead>
+              <tbody id="tableJDMatrixBody">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: CORE COMPETENCY -->
       <section id="tab-core" class="tab-panel">
-        
         <div class="content-grid-2">
           <div class="glass-card">
             <div class="glass-card-header">
@@ -252,22 +321,22 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 1rem;">
-              <div style="background: rgba(99, 102, 241, 0.1); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--primary);">
-                <strong style="color: #a5f3fc;">ระดับพนักงาน (233 ท่าน)</strong>
+              <div style="background: var(--primary-light); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--primary);">
+                <strong style="color: var(--primary);">ระดับพนักงาน (233 ท่าน)</strong>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
                   มี Gap เรื่อง <strong>Learning</strong> มากที่สุดถึง <strong>29.18% (68 คน)</strong> แต่ Relationship มี Gap น้อยที่สุดเพียง 1.29%
                 </p>
               </div>
 
-              <div style="background: rgba(245, 158, 11, 0.1); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--warning);">
-                <strong style="color: #fde68a;">ระดับหัวหน้างาน (34 ท่าน)</strong>
+              <div style="background: var(--warning-light); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--warning);">
+                <strong style="color: var(--warning);">ระดับหัวหน้างาน (34 ท่าน)</strong>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
                   มี Gap เรื่อง <strong>Innovative Thinking</strong> สูงสุดถึง <strong>58.82% (20 คน)</strong> ตามด้วย Entrepreneurship (50%)
                 </p>
               </div>
 
-              <div style="background: rgba(244, 63, 94, 0.1); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--danger);">
-                <strong style="color: #fecdd3;">ระดับผู้จัดการ (14 ท่าน)</strong>
+              <div style="background: var(--danger-light); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--danger);">
+                <strong style="color: var(--danger);">ระดับผู้จัดการ (14 ท่าน)</strong>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
                   มี Gap เรื่อง <strong>FACT</strong> สูงสุดถึง <strong>71.43% (10 คน)</strong> รองลงมาคือ Innovative Thinking (57.14%)
                 </p>
@@ -275,10 +344,9 @@
             </div>
           </div>
         </div>
-
       </section>
 
-      <!-- TAB 3: JOB COMPETENCY -->
+      <!-- TAB 4: JOB COMPETENCY -->
       <section id="tab-job" class="tab-panel">
         <div class="glass-card" style="margin-bottom: 1.5rem;">
           <div class="glass-card-header">
@@ -289,7 +357,7 @@
           </div>
 
           <div class="content-grid-3">
-            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
               <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">🏢 สำนักงาน Top Gaps</h4>
               <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.8;">
                 <li>ความรู้ด้านระบบคุณภาพ: <strong>46.60% (48 คน)</strong></li>
@@ -298,7 +366,7 @@
               </ul>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
               <h4 style="color: var(--warning); margin-bottom: 0.5rem;">📈 กลุ่มงานขาย Top Gaps</h4>
               <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.8;">
                 <li>การวิเคราะห์ข้อมูล: <strong>26.26% (26 คน)</strong></li>
@@ -307,7 +375,7 @@
               </ul>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
               <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">👁️ กลุ่มงานเลสิก Top Gaps</h4>
               <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem; line-height: 1.8;">
                 <li>การปฏิบัติงานตามขั้นตอน & เอกสาร: <strong>14.29% (7 คน)</strong></li>
@@ -319,12 +387,12 @@
         </div>
       </section>
 
-      <!-- TAB 4: MATRIX & BREAKDOWNS -->
+      <!-- TAB 5: MATRIX & BREAKDOWNS -->
       <section id="tab-matrix" class="tab-panel">
         <div class="glass-card">
           <div class="glass-card-header">
             <div>
-              <h3 class="card-title">🧩 ตารางตารางเปรียบเทียบ Core Competency Heatmap Matrix</h3>
+              <h3 class="card-title">🧩 ตารางเปรียบเทียบ Core Competency Heatmap Matrix</h3>
               <p class="card-subtitle">แสดงสัดส่วน % Competency Gap แยกรายกลุ่มงานและรายระดับตำแหน่ง</p>
             </div>
           </div>
@@ -404,7 +472,7 @@
         </div>
       </section>
 
-      <!-- TAB 5: IDP ACTION PLAN -->
+      <!-- TAB 6: IDP ACTION PLAN -->
       <section id="tab-idp" class="tab-panel">
         <div class="glass-card">
           <div class="glass-card-header">
@@ -452,7 +520,23 @@
           คู่มือและ RESTful API Endpoints Specification สำหรับวิศวกรซอฟต์แวร์ Backend เพื่อนำไปเขียนต่อเชื่อมต่อฐานข้อมูล SQL/NoSQL และ Business Logic
         </p>
 
-        <h4 style="color: var(--secondary); margin-top: 1rem;">1. GET /api/v1/competency/summary</h4>
+        <h4 style="color: var(--primary); margin-top: 1rem;">1. GET /api/v1/jd-positions</h4>
+        <div class="code-block">// Endpoint to fetch all 124 JD Competency mappings
+{
+  "total": 124,
+  "data": [
+    {
+      "jdCode": "SD-HRD-01/ACC-01",
+      "dept": "ACC",
+      "title": "ผจก.บัญชีและการเงิน",
+      "level": 3,
+      "totalCount": 13,
+      "competencies": ["Relationship Excellence", "Fact", "Learning", "ความรู้ด้านระบบคุณภาพ", ...]
+    }
+  ]
+}</div>
+
+        <h4 style="color: var(--primary); margin-top: 1rem;">2. GET /api/v1/competency/summary</h4>
         <div class="code-block">// Response Payload Sample (200 OK)
 {
   "status": "success",
@@ -462,32 +546,7 @@
     "targetGapMaxPct": 30.0,
     "currentGapPct": 20.64,
     "isTargetAchieved": true
-  },
-  "topGaps": {
-    "core": { "name": "Learning", "gapPct": 31.32 },
-    "job": { "name": "ความรู้ด้านระบบคุณภาพ", "gapPct": 45.45 }
   }
-}</div>
-
-        <h4 style="color: var(--secondary); margin-top: 1rem;">2. GET /api/v1/competency/gaps?level={level}&department={dept}</h4>
-        <div class="code-block">// Data query schema matching frontend bindings
-SELECT 
-    c.competency_name,
-    COUNT(CASE WHEN eval.score < eval.expected_level THEN 1 END) AS gap_count,
-    COUNT(eval.id) AS total_evaluated,
-    ROUND((COUNT(CASE WHEN eval.score < eval.expected_level THEN 1 END) * 100.0 / COUNT(eval.id)), 2) AS gap_percentage
-FROM competency_evaluations eval
-JOIN competencies c ON eval.competency_id = c.id
-GROUP BY c.id, c.competency_name;</div>
-
-        <h4 style="color: var(--secondary); margin-top: 1rem;">3. POST /api/v1/idp/actions</h4>
-        <div class="code-block">// Request Payload to create IDP Action
-{
-  "employeeId": "EMP-8842",
-  "competencyId": "COMP-CORE-LEARNING",
-  "gapScore": 1.0,
-  "actionPlan": "เข้าอบรมคอร์ส Advanced Data Analysis & Problem Solving",
-  "targetCompletionDate": "2024-12-31"
 }</div>
       </div>
     </div>
