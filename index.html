@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competency Executive Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e3a8a', // Blue 900 (Corporate)
+                        secondary: '#3b82f6', // Blue 500
+                        accent: '#f59e0b', // Amber 500 (Alert/Gap)
+                        success: '#10b981', // Emerald 500
+                        surface: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+            border-radius: 1.25rem;
+        }
+        
+        /* Smooth Fade In */
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+                    <i class="ph-bold ph-chart-bar text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">RX Company</h1>
+                    <p class="text-xs text-slate-500">Executive Competency Dashboard</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Year Selector -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer hover:bg-slate-100 transition">
+                    <i class="ph ph-calendar text-primary"></i>
+                    <span class="text-sm font-semibold">สรุปผลประจำปี 2567</span>
+                    <i class="ph ph-caret-down text-slate-400 text-xs"></i>
+                </div>
+                <button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition flex items-center gap-2 shadow-sm shadow-blue-900/20">
+                    <i class="ph ph-download-simple"></i> Export Report
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-screen-2xl mx-auto w-full p-6 space-y-6">
+        
+        <!-- SECTION 1: Top Level KPI (Corporate Objectives) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            
+            <!-- Assessed Employees -->
+            <div class="glass-card p-6 fade-in" style="animation-delay: 0.1s;">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 mb-1">พนักงานที่ได้รับการประเมิน</p>
+                        <h3 class="text-4xl font-bold text-slate-900">281 <span class="text-lg text-slate-400 font-normal">ท่าน</span></h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-secondary">
+                        <i class="ph-fill ph-users text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-xs font-medium text-success bg-green-50 w-fit px-2 py-1 rounded">
+                    <i class="ph-bold ph-check-circle"></i> ประเมินครบ 100%
+                </div>
+            </div>
+
+            <!-- Corporate Objective (Entrepreneurship) -->
+            <div class="glass-card p-6 border-l-4 border-l-success relative overflow-hidden fade-in" style="animation-delay: 0.2s;">
+                <div class="absolute -right-4 -top-4 text-slate-100 opacity-50 pointer-events-none">
+                    <i class="ph-fill ph-target text-9xl"></i>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-semibold text-primary mb-1 uppercase tracking-wide">Corporate Objective</p>
+                            <p class="text-xs text-slate-500 mb-2">% Gap ของ Entrepreneurship (เป้า &le; 30%)</p>
+                            <div class="flex items-end gap-2">
+                                <h3 class="text-4xl font-bold text-success">20.64%</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between text-xs font-medium text-slate-500">
+                        <span>เทียบปี 2566 (22.67%)</span>
+                        <span class="text-success flex items-center gap-1"><i class="ph-bold ph-trend-down"></i> ดีขึ้น 2.03%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Critical Gap Overall -->
+            <div class="glass-card p-6 border-l-4 border-l-accent fade-in" style="animation-delay: 0.3s;">
+                <p class="text-sm font-medium text-slate-500 mb-1">ช่องว่างที่ต้องเร่งพัฒนา (สูงสุด)</p>
+                <div class="mt-2">
+                    <h3 class="text-2xl font-bold text-slate-900">Learning (การเรียนรู้)</h3>
+                    <p class="text-sm text-slate-500 mt-1">พบพนักงานที่มี Gap ต่ำกว่าเกณฑ์</p>
+                </div>
+                <div class="mt-4 flex items-end gap-2">
+                    <h3 class="text-3xl font-bold text-accent">31.32%</h3>
+                    <span class="text-xs text-slate-500 mb-1">ของพนักงานทั้งหมด</span>
+                </div>
+            </div>
+
+            <!-- Demographics Mini Summary -->
+            <div class="glass-card p-5 fade-in space-y-4" style="animation-delay: 0.4s;">
+                <p class="text-sm font-medium text-slate-500">สัดส่วนพนักงานที่ประเมิน</p>
+                <!-- Levels -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-medium text-slate-600">
+                        <span>Staff (233)</span> <span>Sup (34)</span> <span>Mgr (13)</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
+                        <div class="bg-blue-400 h-2.5" style="width: 83%"></div>
+                        <div class="bg-blue-600 h-2.5" style="width: 12%"></div>
+                        <div class="bg-blue-800 h-2.5" style="width: 5%"></div>
+                    </div>
+                </div>
+                <!-- Groups -->
+                <div class="space-y-2 pt-2 border-t border-slate-100">
+                    <div class="flex justify-between text-xs font-medium text-slate-600">
+                        <span>Office (124)</span> <span>Sales (102)</span> <span>Lasik (56)</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
+                        <div class="bg-indigo-400 h-2.5" style="width: 44%"></div>
+                        <div class="bg-indigo-600 h-2.5" style="width: 36%"></div>
+                        <div class="bg-indigo-800 h-2.5" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            
+            <!-- Left: Overall Core Competency Chart -->
+            <div class="glass-card p-6 xl:col-span-1 fade-in" style="animation-delay: 0.5s;">
+                <h2 class="text-base font-bold text-slate-800 mb-1">Core Competency Gap (%)</h2>
+                <p class="text-xs text-slate-500 mb-6">เปอร์เซ็นต์พนักงานที่มีคะแนนต่ำกว่าระดับที่คาดหวัง</p>
+                
+                <div class="relative w-full h-[300px]">
+                    <canvas id="coreGapChart"></canvas>
+                </div>
+                
+                <div class="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm text-slate-600">
+                    <p><i class="ph-fill ph-info text-secondary mr-1"></i> <strong>เกณฑ์ประเมิน (R.F.I.L.E):</strong></p>
+                    <ul class="mt-2 space-y-1 text-xs list-disc list-inside text-slate-500">
+                        <li>R - Relationship Excellence</li>
+                        <li>F - Fact</li>
+                        <li>I - Innovative Thinking</li>
+                        <li>L - Learning <span class="text-accent font-semibold">(พบปัญหามากสุด)</span></li>
+                        <li>E - Entrepreneurship</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right: Insights by Segments (Replaces multiple slides) -->
+            <div class="xl:col-span-2 space-y-6 fade-in" style="animation-delay: 0.6s;">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="ph-fill ph-lightbulb text-accent"></i> วิเคราะห์จุดที่ต้องพัฒนาแยกตามกลุ่ม (Gap Insights)
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- Insight: By Level -->
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="font-semibold text-slate-800">วิเคราะห์ตามระดับงาน (Level)</h3>
+                            <i class="ph-fill ph-users-three text-slate-400"></i>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Staff -->
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-sm font-medium text-slate-700">พนักงาน (233 ท่าน)</span>
+                                    <span class="text-xs font-bold text-accent">Learning (29.18%)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-accent h-1.5 rounded-full" style="width: 29.18%"></div></div>
+                            </div>
+                            <!-- Supervisor -->
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-sm font-medium text-slate-700">หัวหน้างาน (34 ท่าน)</span>
+                                    <span class="text-xs font-bold text-rose-500">Innovative Thinking (58.82%)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-rose-500 h-1.5 rounded-full" style="width: 58.82%"></div></div>
+                            </div>
+                            <!-- Manager -->
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-sm font-medium text-slate-700">ผู้จัดการ (13 ท่าน)</span>
+                                    <span class="text-xs font-bold text-red-600">Fact (71.43%)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-red-600 h-1.5 rounded-full" style="width: 71.43%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Insight: By Group -->
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="font-semibold text-slate-800">วิเคราะห์ตามกลุ่มงาน (Group)</h3>
+                            <i class="ph-fill ph-briefcase text-slate-400"></i>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Office -->
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-sm font-medium text-slate-700">สำนักงาน (124 ท่าน)</span>
+                                    <span class="text-xs font-bold text-accent">Learning (39.84%)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-accent h-1.5 rounded-full" style="width: 39.84%"></div></div>
+                            </div>
+                            <!-- Sales -->
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-sm font-medium text-slate-700">งานขาย (102 ท่าน)</span>
+                                    <span class="text-xs font-bold text-rose-500">Innovative Thinking (25.49%)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-rose-500 h-1.5 rounded-full" style="width: 25.49%"></div></div>
+                            </div>
+                            <!-- Lasik -->
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-sm font-medium text-slate-700">เลสิก (56 ท่าน)</span>
+                                    <span class="text-xs font-bold text-accent">Learning (28.57%)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-accent h-1.5 rounded-full" style="width: 28.57%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Link to Job Competency -->
+                    <a href="#" class="group block p-5 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white hover:shadow-md transition duration-300">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                <i class="ph-fill ph-book-open text-xl"></i>
+                            </div>
+                            <i class="ph-bold ph-arrow-right text-blue-400 group-hover:translate-x-1 transition"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800">สรุปผล JOB COMPETENCY</h3>
+                        <p class="text-xs text-slate-500 mt-1">ดูรายละเอียดสมรรถนะในงานรายบุคคลและแผนก (31 หัวข้อ)</p>
+                    </a>
+
+                    <!-- Link to Training Plan -->
+                    <a href="#" class="group block p-5 rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white hover:shadow-md transition duration-300">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                                <i class="ph-fill ph-graduation-cap text-xl"></i>
+                            </div>
+                            <i class="ph-bold ph-arrow-right text-emerald-400 group-hover:translate-x-1 transition"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800">สร้าง Training Plan 2567</h3>
+                        <p class="text-xs text-slate-500 mt-1">จัดทำแผนพัฒนาบุคลากรจากช่องว่างที่พบ (Learning, Fact, Innovative)</p>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data mapping based on the slide hints
+            // Known data: Entrepreneurship = 20.64%, Learning = 31.32%
+            // Mock data for R, F, I based on the story (F is high for Mgrs, I is high for Sups/Sales)
+            const coreLabels = ['Relationship (R)', 'Fact (F)', 'Innovative (I)', 'Learning (L)', 'Entrepreneurship (E)'];
+            const gapData = [15.2, 24.5, 27.8, 31.32, 20.64]; // % of staff having gap
+
+            const ctx = document.getElementById('coreGapChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: coreLabels,
+                    datasets: [{
+                        label: '% Gap',
+                        data: gapData,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)', // Blue
+                            'rgba(244, 63, 94, 0.7)',  // Rose (High gap area)
+                            'rgba(244, 63, 94, 0.7)',  // Rose
+                            'rgba(245, 158, 11, 0.9)', // Amber (Highest)
+                            'rgba(16, 185, 129, 0.7)'  // Emerald (Passed KPI)
+                        ],
+                        borderRadius: 6,
+                        borderSkipped: false,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar chart for better readability of text
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' มี Gap: ' + context.parsed.x + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(226, 232, 240, 0.5)' },
+                            title: { display: true, text: 'เปอร์เซ็นต์ (%)', color: '#94a3b8', font: {family: 'Prompt'} }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: {family: 'Prompt', size: 12}, color: '#475569' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
