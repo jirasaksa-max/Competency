@@ -1,11 +1,8 @@
 /**
- * Competency Assessment 5.0 Dashboard - Light Mode Application Controller
- * Handles PPTX Summary Analytics, JD Competency Matrix (OJT List), Interactive Charts & IDP Management
+ * Competency Assessment 5.0 Dashboard - Application Controller
+ * Pure UTF-8 Encoded via Node.js
  */
 
-// --------------------------------------------------------------------------
-// 1. DATA STATE & BACKEND CONTRACT (Extracted from PPTX & JD List XLSX)
-// --------------------------------------------------------------------------
 const CompetencyData = {
   metadata: {
     year: 2024,
@@ -13,14 +10,14 @@ const CompetencyData = {
     totalEmployees: 281,
     corporateTargetGap: 30.0,
     groups: {
-      office: { name: "เธเธฅเธธเนเธกเธเธฒเธเธชเธณเธเธฑเธเธเธฒเธ", count: 124 },
-      sales: { name: "เธเธฅเธธเนเธกเธเธฒเธเธเธฒเธข", count: 102 },
-      lasik: { name: "เธเธฅเธธเนเธกเธเธฒเธเน€เธฅเธชเธดเธ", count: 56 }
+      office: { name: "กลุ่มงานสำนักงาน", count: 124 },
+      sales: { name: "กลุ่มงานขาย", count: 102 },
+      lasik: { name: "กลุ่มงานเลสิก", count: 56 }
     },
     levels: {
-      staff: { level: 1, name: "เธฃเธฐเธ”เธฑเธเธเธเธฑเธเธเธฒเธ", expectedLevel: 3, count: 233 },
-      supervisor: { level: 2, name: "เธฃเธฐเธ”เธฑเธเธซเธฑเธงเธซเธเนเธฒเธเธฒเธ", expectedLevel: 4, count: 34 },
-      manager: { level: 3, name: "เธฃเธฐเธ”เธฑเธเธเธนเนเธเธฑเธ”เธเธฒเธฃ", expectedLevel: 5, count: 13 }
+      staff: { level: 1, name: "ระดับพนักงาน", expectedLevel: 3, count: 233 },
+      supervisor: { level: 2, name: "ระดับหัวหน้างาน", expectedLevel: 4, count: 34 },
+      manager: { level: 3, name: "ระดับผู้จัดการ", expectedLevel: 5, count: 13 }
     }
   },
 
@@ -66,26 +63,23 @@ const CompetencyData = {
 
   jobCompetency: {
     overall: [
-      { name: "เธเธงเธฒเธกเธฃเธนเนเธ”เนเธฒเธเธฃเธฐเธเธเธเธธเธ“เธ เธฒเธ", total: 121, gapCount: 55, gapPct: 45.45, category: "Knowledge" },
-      { name: "เธเธฒเธฃเธงเธดเน€เธเธฃเธฒเธฐเธซเนเธเนเธญเธกเธนเธฅ", total: 128, gapCount: 40, gapPct: 31.25, category: "Skill" },
-      { name: "เธเธฒเธฃเธชเธทเนเธญเธชเธฒเธฃ (Communication)", total: 162, gapCount: 33, gapPct: 20.37, category: "Skill" },
-      { name: "เธเธฒเธฃเนเธเนเนเธเธเธฑเธเธซเธฒเนเธฅเธฐเธเธฒเธฃเธ•เธฑเธ”เธชเธดเธเนเธ", total: 238, gapCount: 41, gapPct: 17.23, category: "Skill" },
-      { name: "เธเธฒเธฃเธเธเธดเธเธฑเธ•เธดเธเธฒเธเธ•เธฒเธกเธเธฑเนเธเธ•เธญเธ & เน€เธญเธเธชเธฒเธฃ", total: 158, gapCount: 14, gapPct: 8.86, category: "Skill" }
+      { name: "ความรู้ด้านระบบคุณภาพ", total: 121, gapCount: 55, gapPct: 45.45, category: "Knowledge" },
+      { name: "การวิเคราะห์ข้อมูล", total: 128, gapCount: 40, gapPct: 31.25, category: "Skill" },
+      { name: "การสื่อสาร (Communication)", total: 162, gapCount: 33, gapPct: 20.37, category: "Skill" },
+      { name: "การแก้ไขปัญหาและการตัดสินใจ", total: 238, gapCount: 41, gapPct: 17.23, category: "Skill" },
+      { name: "การปฏิบัติงานตามขั้นตอน & เอกสาร", total: 158, gapCount: 14, gapPct: 8.86, category: "Skill" }
     ]
   },
 
   idpActions: [
-    { id: "IDP-001", name: "เธชเธกเธเธฒเธข เธกเธตเธชเธธเธ", level: "เธซเธฑเธงเธซเธเนเธฒเธเธฒเธ", group: "เธชเธณเธเธฑเธเธเธฒเธ", gapItem: "เธเธฒเธฃเธงเธดเน€เธเธฃเธฒเธฐเธซเนเธเนเธญเธกเธนเธฅ (64.71%)", status: "เธเธณเธฅเธฑเธเธ”เธณเน€เธเธดเธเธเธฒเธฃ", dueDate: "2024-12-15" },
-    { id: "IDP-002", name: "เธงเธดเธ เธฒเธ”เธฒ เน€เธ”เนเธเธ”เธต", level: "เธเธนเนเธเธฑเธ”เธเธฒเธฃ", group: "เธเธฒเธข", gapItem: "เธ เธฒเธงเธฐเธเธนเนเธเธณ (81.82%)", status: "เธฃเธญเธ”เธณเน€เธเธดเธเธเธฒเธฃ", dueDate: "2024-12-30" },
-    { id: "IDP-003", name: "เธญเธเธฑเธเธ•เน เธเธฑเธขเธเธเธฐ", level: "เธเธเธฑเธเธเธฒเธ", group: "เน€เธฅเธชเธดเธ", gapItem: "Learning (28.57%)", status: "เธญเธเธธเธกเธฑเธ•เธดเนเธฅเนเธง", dueDate: "2024-11-30" },
-    { id: "IDP-004", name: "เธเธ เธฒเธฅเธฑเธข เธชเธงเนเธฒเธ", level: "เธเธเธฑเธเธเธฒเธ", group: "เธชเธณเธเธฑเธเธเธฒเธ", gapItem: "เธเธงเธฒเธกเธฃเธนเนเธ”เนเธฒเธเธฃเธฐเธเธเธเธธเธ“เธ เธฒเธ (46.6%)", status: "เธเธณเธฅเธฑเธเธ”เธณเน€เธเธดเธเธเธฒเธฃ", dueDate: "2024-12-20" }
+    { id: "IDP-001", name: "สมชาย มีสุข", level: "หัวหน้างาน", group: "สำนักงาน", gapItem: "การวิเคราะห์ข้อมูล (64.71%)", status: "กำลังดำเนินการ", dueDate: "2024-12-15" },
+    { id: "IDP-002", name: "วิภาดา เด่นดี", level: "ผู้จัดการ", group: "ขาย", gapItem: "ภาวะผู้นำ (81.82%)", status: "รอดำเนินการ", dueDate: "2024-12-30" },
+    { id: "IDP-003", name: "อนันต์ ชัยชนะ", level: "พนักงาน", group: "เลสิก", gapItem: "Learning (28.57%)", status: "อนุมัติแล้ว", dueDate: "2024-11-30" },
+    { id: "IDP-004", name: "นภาลัย สว่าง", level: "พนักงาน", group: "สำนักงาน", gapItem: "ความรู้ด้านระบบคุณภาพ (46.6%)", status: "กำลังดำเนินการ", dueDate: "2024-12-20" }
   ]
 };
 
-// --------------------------------------------------------------------------
-// 2. JD MATRIX DATA (Parsed from JD List _ Competency _ OJT.xlsx - 124 Positions)
-// --------------------------------------------------------------------------
-const JDPositionsData = [
+const JDPositionsData = ﻿[
     {
         "jdCode":  "SD-HRD-01/ACC-01",
         "dept":  "ACC",
@@ -2683,22 +2677,18 @@ const JDPositionsData = [
     }
 ];
 
-// --------------------------------------------------------------------------
-// 3. CHART INSTANCES & SETUP (Light Mode Optimized Colors)
-// --------------------------------------------------------------------------
-let charts = {};
-
-// ─── Tab titles for topbar ───
 const TAB_TITLES = {
-  overview: 'ภาพรวมและเป้าหมาย',
-  jd:       'เกณฑ์ประเมินสมรรถนะ 124 ตำแหน่ง',
-  core:     'Core Competency Analysis',
-  job:      'Job Competency Analysis',
-  matrix:   'Heatmap Matrix ทุกมิติ',
-  idp:      'Individual Development Plan (IDP)'
+  overview: "ภาพรวมและเป้าหมาย",
+  jd:       "เกณฑ์ประเมินสมรรถนะ 124 ตำแหน่ง",
+  core:     "Core Competency Analysis",
+  job:      "Job Competency Analysis",
+  matrix:   "Heatmap Matrix ทุกมิติ",
+  idp:      "Individual Development Plan (IDP)"
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+let charts = {};
+
+document.addEventListener("DOMContentLoaded", () => {
   initTabNav();
   initCharts();
   renderCoreSummary();
@@ -2708,55 +2698,51 @@ document.addEventListener('DOMContentLoaded', () => {
   initJDSearch();
 });
 
-// ─── Tab navigation ───
 function initTabNav() {
-  const navBtns  = document.querySelectorAll('.nav-item[data-tab]');
-  const panels   = document.querySelectorAll('.tab-panel');
-  const titleEl  = document.getElementById('topbarTitle');
+  const navBtns  = document.querySelectorAll(".nav-item[data-tab]");
+  const panels   = document.querySelectorAll(".tab-panel");
+  const titleEl  = document.getElementById("topbarTitle");
 
   navBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener("click", () => {
       const tab = btn.dataset.tab;
-      navBtns.forEach(b => b.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      const panel = document.getElementById('tab-' + tab);
-      if (panel) panel.classList.add('active');
-      if (titleEl) titleEl.textContent = TAB_TITLES[tab] || '';
+      navBtns.forEach(b => b.classList.remove("active"));
+      panels.forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      const panel = document.getElementById("tab-" + tab);
+      if (panel) panel.classList.add("active");
+      if (titleEl) titleEl.textContent = TAB_TITLES[tab] || "";
     });
   });
 }
 
-// ─── Charts ───
-let charts = {};
-
 function initCharts() {
   Chart.defaults.font.family = "'Kanit', sans-serif";
-  Chart.defaults.color = '#64748b';
+  Chart.defaults.color = "#64748b";
 
-  // 1. Radar – Core Competency
-  const cRadar = document.getElementById('chartRadar')?.getContext('2d');
+  // 1. Radar - Core Competency
+  const cRadar = document.getElementById("chartRadar")?.getContext("2d");
   if (cRadar) {
     charts.radar = new Chart(cRadar, {
-      type: 'radar',
+      type: "radar",
       data: {
-        labels: ['Relationship','Fact','Innovative','Learning','Entrepreneurship'],
+        labels: ["Relationship", "Fact", "Innovative", "Learning", "Entrepreneurship"],
         datasets: [
           {
-            label: '% Gap ทั้งบริษัท',
+            label: "% Gap ทั้งบริษัท",
             data: [6.41, 12.81, 25.62, 31.32, 20.64],
-            backgroundColor: 'rgba(37,99,235,.15)',
-            borderColor: '#2563eb',
-            pointBackgroundColor: '#2563eb',
+            backgroundColor: "rgba(37,99,235,.15)",
+            borderColor: "#2563eb",
+            pointBackgroundColor: "#2563eb",
             borderWidth: 2.5,
             pointRadius: 4
           },
           {
-            label: 'เป้าหมายสูงสุด 30%',
-            data: [30,30,30,30,30],
-            backgroundColor: 'transparent',
-            borderColor: 'rgba(220,38,38,.4)',
-            borderDash: [5,4],
+            label: "เป้าหมายสูงสุด 30%",
+            data: [30, 30, 30, 30, 30],
+            backgroundColor: "transparent",
+            borderColor: "rgba(220,38,38,.4)",
+            borderDash: [5, 4],
             pointRadius: 0,
             borderWidth: 1.5
           }
@@ -2767,35 +2753,35 @@ function initCharts() {
         maintainAspectRatio: false,
         scales: {
           r: {
-            angleLines: { color: '#e2e8f0' },
-            grid: { color: '#e2e8f0' },
-            pointLabels: { color: '#334155', font: { size: 11, weight: '600', family: "'Kanit'" } },
-            ticks: { backdropColor: 'transparent', color: '#94a3b8', font: { size: 9 } }
+            angleLines: { color: "#e2e8f0" },
+            grid: { color: "#e2e8f0" },
+            pointLabels: { color: "#334155", font: { size: 11, weight: "600", family: "'Kanit'" } },
+            ticks: { backdropColor: "transparent", color: "#94a3b8", font: { size: 9 } }
           }
         },
-        plugins: { legend: { position: 'bottom', labels: { font: { family: "'Kanit'" }, boxWidth: 12 } } }
+        plugins: { legend: { position: "bottom", labels: { font: { family: "'Kanit'" }, boxWidth: 12 } } }
       }
     });
   }
 
-  // 2. Horizontal bar – Top 5 Job Gaps
-  const cJob = document.getElementById('chartJobBar')?.getContext('2d');
+  // 2. Horizontal bar - Top 5 Job Gaps
+  const cJob = document.getElementById("chartJobBar")?.getContext("2d");
   if (cJob) {
     charts.jobBar = new Chart(cJob, {
-      type: 'bar',
-      indexAxis: 'y',
+      type: "bar",
+      indexAxis: "y",
       data: {
         labels: [
-          'ความรู้ระบบคุณภาพ',
-          'การวิเคราะห์ข้อมูล',
-          'การสื่อสาร',
-          'การแก้ไขปัญหา & ตัดสินใจ',
-          'ปฏิบัติงานตามขั้นตอน & เอกสาร'
+          "ความรู้ระบบคุณภาพ",
+          "การวิเคราะห์ข้อมูล",
+          "การสื่อสาร",
+          "การแก้ไขปัญหา & ตัดสินใจ",
+          "ปฏิบัติงานตามขั้นตอน & เอกสาร"
         ],
         datasets: [{
-          label: '% Gap',
+          label: "% Gap",
           data: [45.45, 31.25, 20.37, 17.23, 8.86],
-          backgroundColor: ['#dc2626','#d97706','#2563eb','#0891b2','#16a34a'],
+          backgroundColor: ["#dc2626", "#d97706", "#2563eb", "#0891b2", "#16a34a"],
           borderRadius: 5,
           borderSkipped: false
         }]
@@ -2804,7 +2790,7 @@ function initCharts() {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { grid: { color: '#f1f5f9' }, ticks: { callback: v => v + '%', font: { family: "'Kanit'" } } },
+          x: { grid: { color: "#f1f5f9" }, ticks: { callback: v => v + "%", font: { family: "'Kanit'" } } },
           y: { grid: { display: false }, ticks: { font: { family: "'Kanit'", size: 11 } } }
         },
         plugins: { legend: { display: false } }
@@ -2812,17 +2798,17 @@ function initCharts() {
     });
   }
 
-  // 3. Grouped bar – Core by Level
-  const cLevel = document.getElementById('chartCoreLevel')?.getContext('2d');
+  // 3. Grouped bar - Core by Level
+  const cLevel = document.getElementById("chartCoreLevel")?.getContext("2d");
   if (cLevel) {
     charts.coreLevel = new Chart(cLevel, {
-      type: 'bar',
+      type: "bar",
       data: {
-        labels: ['Relationship','Fact','Innovative','Learning','Entrepreneurship'],
+        labels: ["Relationship", "Fact", "Innovative", "Learning", "Entrepreneurship"],
         datasets: [
-          { label: 'พนักงาน (233)', data: [1.29,4.72,18.88,29.18,15.02], backgroundColor: '#0891b2', borderRadius: 3 },
-          { label: 'หัวหน้างาน (34)', data: [23.53,44.12,58.82,38.24,50.00], backgroundColor: '#d97706', borderRadius: 3 },
-          { label: 'ผู้จัดการ (14)', data: [50.00,71.43,57.14,50.00,42.86], backgroundColor: '#dc2626', borderRadius: 3 }
+          { label: "พนักงาน (233)", data: [1.29, 4.72, 18.88, 29.18, 15.02], backgroundColor: "#0891b2", borderRadius: 3 },
+          { label: "หัวหน้างาน (34)", data: [23.53, 44.12, 58.82, 38.24, 50.00], backgroundColor: "#d97706", borderRadius: 3 },
+          { label: "ผู้จัดการ (14)", data: [50.00, 71.43, 57.14, 50.00, 42.86], backgroundColor: "#dc2626", borderRadius: 3 }
         ]
       },
       options: {
@@ -2830,22 +2816,21 @@ function initCharts() {
         maintainAspectRatio: false,
         scales: {
           x: { grid: { display: false }, ticks: { font: { family: "'Kanit'", size: 10 } } },
-          y: { grid: { color: '#f1f5f9' }, ticks: { callback: v => v + '%', font: { family: "'Kanit'" } } }
+          y: { grid: { color: "#f1f5f9" }, ticks: { callback: v => v + "%", font: { family: "'Kanit'" } } }
         },
-        plugins: { legend: { position: 'bottom', labels: { font: { family: "'Kanit'" }, boxWidth: 12 } } }
+        plugins: { legend: { position: "bottom", labels: { font: { family: "'Kanit'" }, boxWidth: 12 } } }
       }
     });
   }
 }
 
-// ─── Core Summary Table ───
 function renderCoreSummary() {
-  const tbody = document.getElementById('tblCoreSummary');
+  const tbody = document.getElementById("tblCoreSummary");
   if (!tbody) return;
   const data = CompetencyData.coreCompetency.overall;
   tbody.innerHTML = data.map((item, i) => {
-    const cls = item.gapPct >= 30 ? 'red' : item.gapPct >= 15 ? 'amber' : 'green';
-    const barCls = item.gapPct >= 30 ? 'red' : item.gapPct >= 15 ? 'amber' : 'green';
+    const cls = item.gapPct >= 30 ? "red" : item.gapPct >= 15 ? "amber" : "green";
+    const barCls = item.gapPct >= 30 ? "red" : item.gapPct >= 15 ? "amber" : "green";
     return `
       <tr>
         <td style="color:var(--text-400);font-weight:600;">${i+1}</td>
@@ -2860,32 +2845,31 @@ function renderCoreSummary() {
           </div>
         </td>
       </tr>`;
-  }).join('');
+  }).join("");
 }
 
-// ─── JD Matrix Table ───
 function renderJDTable(data) {
-  const tbody = document.getElementById('tblJD');
-  const countEl = document.getElementById('jdCount');
-  if (countEl) countEl.textContent = data.length + ' ตำแหน่ง';
+  const tbody = document.getElementById("tblJD");
+  const countEl = document.getElementById("jdCount");
+  if (countEl) countEl.textContent = data.length + " ตำแหน่ง";
   if (!tbody) return;
 
   tbody.innerHTML = data.map(pos => {
-    const lvlLabel = pos.level === 3 ? 'ผู้จัดการ' : pos.level === 2 ? 'หัวหน้างาน' : 'พนักงาน';
-    const lvlTag   = pos.level === 3 ? 'tag-red' : pos.level === 2 ? 'tag-amber' : 'tag-green';
+    const lvlLabel = pos.level === 3 ? "ผู้จัดการ" : pos.level === 2 ? "หัวหน้างาน" : "พนักงาน";
+    const lvlTag   = pos.level === 3 ? "tag-red" : pos.level === 2 ? "tag-amber" : "tag-green";
     const coreComp = pos.competencies.filter(c =>
-      ['Relationship Excellence','Fact','Innovative Thinking','Learning','Entrepreneurship'].includes(c)
+      ["Relationship Excellence", "Fact", "Innovative Thinking", "Learning", "Entrepreneurship"].includes(c)
     );
     const knowledgeComp = pos.competencies.filter(c =>
-      c.includes('Knowledge') || c.includes('ความรู้') || c.includes('Lasik') || c.includes('Legal')
+      c.includes("Knowledge") || c.includes("ความรู้") || c.includes("Lasik") || c.includes("Legal")
     );
     const skillComp = pos.competencies.filter(c =>
       !coreComp.includes(c) && !knowledgeComp.includes(c)
     );
     const chips =
-      coreComp.map(c => `<span class="chip chip-core">${c}</span>`).join('') +
-      knowledgeComp.map(c => `<span class="chip chip-know">${c.replace(/ \(.*\)/, '')}</span>`).join('') +
-      skillComp.map(c => `<span class="chip chip-skill">${c.replace(/ \(.*\)/, '').replace(/[\(\)].*$/, '').trim()}</span>`).join('');
+      coreComp.map(c => `<span class="chip chip-core">${c}</span>`).join("") +
+      knowledgeComp.map(c => `<span class="chip chip-know">${c.replace(/ \(.*\)/, "")}</span>`).join("") +
+      skillComp.map(c => `<span class="chip chip-skill">${c.replace(/ \(.*\)/, "").replace(/[\(\)].*$/, "").trim()}</span>`).join("");
 
     return `
       <tr>
@@ -2896,42 +2880,40 @@ function renderJDTable(data) {
         <td style="text-align:center;"><strong>${pos.totalCount}</strong></td>
         <td style="max-width:480px;line-height:1.8;">${chips}</td>
       </tr>`;
-  }).join('');
+  }).join("");
 }
 
-// ─── JD Search & Filter ───
 function initJDSearch() {
-  const search = document.getElementById('searchJD');
-  const dept   = document.getElementById('jdDept');
-  const level  = document.getElementById('jdLevel');
+  const search = document.getElementById("searchJD");
+  const dept   = document.getElementById("jdDept");
+  const level  = document.getElementById("jdLevel");
 
   function doFilter() {
-    const q   = search?.value.toLowerCase().trim() || '';
-    const d   = dept?.value   || 'all';
-    const lv  = level?.value  || 'all';
+    const q   = search?.value.toLowerCase().trim() || "";
+    const d   = dept?.value   || "all";
+    const lv  = level?.value  || "all";
     const res = JDPositionsData.filter(p => {
       const mq = !q || p.title.toLowerCase().includes(q) ||
                        p.jdCode.toLowerCase().includes(q) ||
-                       (p.dept||'').toLowerCase().includes(q);
-      const md = d  === 'all' || p.dept === d;
-      const ml = lv === 'all' || String(p.level) === lv;
+                       (p.dept||"").toLowerCase().includes(q);
+      const md = d  === "all" || p.dept === d;
+      const ml = lv === "all" || String(p.level) === lv;
       return mq && md && ml;
     });
     renderJDTable(res);
   }
 
-  search?.addEventListener('input',  doFilter);
-  dept?.addEventListener('change',   doFilter);
-  level?.addEventListener('change',  doFilter);
+  search?.addEventListener("input",  doFilter);
+  dept?.addEventListener("change",   doFilter);
+  level?.addEventListener("change",  doFilter);
 }
 
-// ─── IDP Table ───
 function renderIDPTable() {
-  const tbody = document.getElementById('tblIDP');
+  const tbody = document.getElementById("tblIDP");
   if (!tbody) return;
   tbody.innerHTML = CompetencyData.idpActions.map(a => {
-    const stCls = a.status === 'อนุมัติแล้ว' ? 'tag-green' :
-                  a.status === 'กำลังดำเนินการ' ? 'tag-blue' : 'tag-amber';
+    const stCls = a.status === "อนุมัติแล้ว" ? "tag-green" :
+                  a.status === "กำลังดำเนินการ" ? "tag-blue" : "tag-amber";
     return `
       <tr>
         <td><code>${a.id}</code></td>
@@ -2943,24 +2925,21 @@ function renderIDPTable() {
         <td>${a.dueDate}</td>
         <td><button class="btn btn-sm" onclick="alert('จัดการ IDP: ${a.name}')">จัดการ</button></td>
       </tr>`;
-  }).join('');
+  }).join("");
 }
 
-// ─── Modal ───
 function initModalListeners() {
-  const modal   = document.getElementById('apiModal');
-  const openBtn = document.getElementById('btnOpenApi');
-  const closeBtn= document.getElementById('btnCloseApi');
-  if (openBtn  && modal) openBtn.addEventListener('click',  () => modal.classList.add('open'));
-  if (closeBtn && modal) closeBtn.addEventListener('click', () => modal.classList.remove('open'));
-  modal?.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+  const modal   = document.getElementById("apiModal");
+  const openBtn = document.getElementById("btnOpenApi");
+  const closeBtn= document.getElementById("btnCloseApi");
+  if (openBtn  && modal) openBtn.addEventListener("click",  () => modal.classList.add("open"));
+  if (closeBtn && modal) closeBtn.addEventListener("click", () => modal.classList.remove("open"));
+  modal?.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
 }
 
-// ─── Global API Service ───
 window.CompetencyAPIService = {
   getSummary:    () => CompetencyData,
   getJDPositions:() => JDPositionsData,
   getCoreGaps:   () => CompetencyData.coreCompetency,
   getIDPActions: () => CompetencyData.idpActions
 };
-
